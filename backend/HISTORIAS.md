@@ -37,13 +37,13 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 3 — Núcleo del solver (MAX, una fase)
 
-- [ ] **BE-3.1** Criterio de optimalidad: óptimo si todos los coeficientes de la fila Z son ≥ 0.
-- [ ] **BE-3.2** Variable entrante: coeficiente más negativo de la fila Z (empate → menor índice).
-- [ ] **BE-3.3** Prueba de razones: `rhs / coef` solo si `coef > 0`.
-- [ ] **BE-3.4** Variable saliente: menor razón (empate → menor índice).
-- [ ] **BE-3.5** Sin razón positiva → `NO_ACOTADO` con mensaje explicativo.
-- [ ] **BE-3.6** Normalización de la fila pivote y registro de la operación.
-- [ ] **BE-3.7** Eliminación de la columna pivote (incluida la fila Z) con operaciones registradas.
+- [x] **BE-3.1** Criterio de optimalidad: óptimo si todos los coeficientes de la fila Z son ≥ 0.
+- [x] **BE-3.2** Variable entrante: coeficiente más negativo de la fila Z (empate → menor índice).
+- [x] **BE-3.3** Prueba de razones: `rhs / coef` solo si `coef > 0`.
+- [x] **BE-3.4** Variable saliente: menor razón (empate → menor índice).
+- [x] **BE-3.5** Sin razón positiva → `NO_ACOTADO` con mensaje explicativo.
+- [x] **BE-3.6** Normalización de la fila pivote y registro de la operación.
+- [x] **BE-3.7** Eliminación de la columna pivote (incluida la fila Z) con operaciones registradas.
 - [x] **BE-3.8** Iteración completa: `numero`, `fase`, `tablaAntes`, `entrante`, `razones`, `saliente`, `pivote`, `operaciones`, `tablaDespues`, `explicacion`.
 - [x] **BE-3.9** Iteración 0 = tabla inicial, para poder navegar desde el comienzo.
 - [x] **BE-3.10** Resultado final: variables, Z, holguras/excesos/artificiales y `tableauFinal`.
