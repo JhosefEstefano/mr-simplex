@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Calculator, Goal, Table2 } from 'lucide-react';
+import { BarChart3, BookOpen, Calculator, Goal, Table2, Truck } from 'lucide-react';
 import { cn } from '../utils/cn.js';
 
 /** Los cuatro pasos del flujo, con su icono y su etiqueta. */
@@ -62,7 +62,15 @@ export default function StepIndicator({ pasoActual, className }) {
 /**
  * Navegación lateral con los cuatro pasos.
  */
-export function Sidebar({ pasoActual, onCambiarPaso, habilitado, ejercicio, usuario, onSalir }) {
+export function Sidebar({
+  pasoActual,
+  onCambiarPaso,
+  habilitado,
+  ejercicio,
+  usuario,
+  onSalir,
+  onAbrirTransporte
+}) {
   return (
     <aside className="flex w-[245px] shrink-0 flex-col border-r border-border bg-card">
       <div className="flex items-center gap-2.5 px-5 py-4">
@@ -115,6 +123,26 @@ export function Sidebar({ pasoActual, onCambiarPaso, habilitado, ejercicio, usua
           })}
         </ul>
       </nav>
+
+      <div className="px-3 pb-3">
+        <button
+          type="button"
+          onClick={onAbrirTransporte}
+          className="flex w-full items-center gap-2.5 rounded-[10px] border border-border bg-background px-3 py-2.5 text-left transition-colors duration-150 hover:bg-muted"
+        >
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] bg-[#ECFEFF] text-[#0891B2]">
+            <Truck size={15} aria-hidden="true" />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[13px] font-semibold text-foreground">
+              Problema de transporte
+            </span>
+            <span className="block text-[11px] text-muted-foreground">
+              Módulo adicional
+            </span>
+          </span>
+        </button>
+      </div>
 
       <div className="px-3 pb-3">
         <div className="rounded-[10px] border border-border bg-background px-3 py-2.5">

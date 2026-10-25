@@ -74,8 +74,9 @@ Convención: `FE-<épica>.<n>`.
 - [x] **FE-7.3** Prueba de recorrido completo por los cuatro pasos.
 - [x] **FE-7.4** README del frontend con la instalación y los scripts.
 
-## Épica 8 — Módulo de transporte (pendiente)
+## Épica 8 — Módulo de transporte
 
-- [ ] **FE-8.1** Editor de matriz con orígenes, destinos y costos.
-- [ ] **FE-8.2** Compilador de la matriz a un modelo de programación lineal con `nombresVariables` `x_ij`.
-- [ ] **FE-8.3** Presentación del resultado como matriz de asignación.
+- [x] **FE-8.1** Editor de matriz con orígenes, destinos, ofertas, demandas y costos.
+- [x] **FE-8.2** Compilador de la matriz a un modelo de programación lineal con `nombresVariables` `x_ij`.
+- [x] **FE-8.3** Presentación del resultado como matriz de asignación y plan de envío.
+- [x] **FE-8.4** Enlace al procedimiento simplex del modelo compilado.

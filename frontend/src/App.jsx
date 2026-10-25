@@ -9,6 +9,7 @@ import PasoPivoteo from './steps/PasoPivoteo.jsx';
 import PasoResultado from './steps/PasoResultado.jsx';
 import ModelosGuardados from './components/ModelosGuardados.jsx';
 import PanelSesion from './components/PanelSesion.jsx';
+import EditorTransporte from './components/EditorTransporte.jsx';
 import { Alert } from './components/ui/Alert.jsx';
 import { guardarModelo } from './services/api.js';
 
@@ -41,6 +42,7 @@ function Aplicacion() {
 
   const [panelModelos, setPanelModelos] = useState(false);
   const [panelSesion, setPanelSesion] = useState(false);
+  const [panelTransporte, setPanelTransporte] = useState(false);
   const [avisoSesion, setAvisoSesion] = useState(null);
 
   const habilitado = (numero) => {
@@ -134,6 +136,7 @@ function Aplicacion() {
         ejercicio={ejercicio}
         usuario={usuario}
         onSalir={() => dispatch({ tipo: 'salirSesion' })}
+        onAbrirTransporte={() => setPanelTransporte(true)}
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -187,6 +190,29 @@ function Aplicacion() {
       </div>
 
       <ModelosGuardados abierto={panelModelos} onCerrar={() => setPanelModelos(false)} />
+
+      <EditorTransporte
+        abierto={panelTransporte}
+        onCerrar={() => setPanelTransporte(false)}
+        onVerProcedimiento={(modelo, respuesta) => {
+          dispatch({
+            tipo: 'cargarResolucion',
+            respuesta,
+            modelo: {
+              numVariables: modelo.numVariables,
+              objetivo: modelo.objetivo,
+              coeficientesZ: modelo.coeficientesZ.map(String),
+              restricciones: modelo.restricciones.map((restriccion) => ({
+                coeficientes: restriccion.coeficientes.map(String),
+                signo: restriccion.signo,
+                rhs: String(restriccion.rhs)
+              }))
+            }
+          });
+          setPanelTransporte(false);
+          dispatch({ tipo: 'irA', paso: 3 });
+        }}
+      />
 
       <PanelSesion
         abierto={panelSesion}
