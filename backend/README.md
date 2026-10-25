@@ -217,9 +217,9 @@ La suite cubre:
 - Persistencia contra un **MongoDB real** y el script de seed.
 - Flujo completo de extremo a extremo.
 
-> Las pruebas de persistencia usan la base `linear-studio-pruebas` y **se
-> omiten solas** si no hay un MongoDB disponible. Se puede indicar otra URI con
-> `MONGODB_URI_TEST`.
+> Las pruebas de persistencia usan bases propias (`linear-studio-pruebas-*`, una
+> por archivo) y **se omiten solas** si no hay un MongoDB disponible. Se puede
+> indicar otra URI base con `MONGODB_URI_TEST`.
 
 El solver se validó además de forma independiente contra un barrido de vértices
 del poliedro (1200 modelos aleatorios con `≤`, `≥` y `=`, en `MAX` y `MIN`),
