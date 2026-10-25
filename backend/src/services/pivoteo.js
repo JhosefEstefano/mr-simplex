@@ -31,8 +31,11 @@ export function esOptimo(tabla, opciones = {}) {
  * Variable entrante: la columna con el coeficiente más negativo de la fila Z.
  * Los empates se resuelven por la columna más a la izquierda.
  *
+ * Con `bland: true` se aplica la regla de Bland (la primera columna con
+ * coeficiente negativo), que garantiza que el método termina.
+ *
  * @param {object} tabla
- * @param {{excluir?: Set<string>}} [opciones]
+ * @param {{excluir?: Set<string>, bland?: boolean}} [opciones]
  * @returns {{columna: number, nombre: string, coeficiente: object}|null}
  */
 export function variableEntrante(tabla, opciones = {}) {
@@ -42,6 +45,12 @@ export function variableEntrante(tabla, opciones = {}) {
   tabla.filaZ.forEach((coeficiente, columna) => {
     if (excluidas.has(tabla.columnas[columna])) return;
     if (!esNegativo(coeficiente)) return;
+
+    if (opciones.bland) {
+      if (mejor === null) mejor = columna;
+      return;
+    }
+
     if (mejor === null || compara(coeficiente, tabla.filaZ[mejor]) < 0) mejor = columna;
   });
 

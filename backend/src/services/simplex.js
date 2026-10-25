@@ -9,6 +9,12 @@ import { ESTADOS, TIPOS_VARIABLE } from '../constants/dominio.js';
 export const LIMITE_ITERACIONES = 100;
 
 /**
+ * Iteraciones a partir de las cuales se aplica la regla de Bland, que
+ * garantiza que el simplex termina aunque la regla de Dantzig se ciclasse.
+ */
+export const LIMITE_PARA_REGLA_DE_BLAND = 50;
+
+/**
  * Sustituye el guion por el signo menos tipográfico en los textos de explicación.
  * @param {string} texto
  * @returns {string}
@@ -176,7 +182,8 @@ function ejecutarIteraciones(tabla, iteraciones, decimales, opciones = {}) {
       return { estado: ESTADOS.OPTIMO, tabla: actual };
     }
 
-    const entrante = variableEntrante(actual, { excluir });
+    const bland = paso >= LIMITE_PARA_REGLA_DE_BLAND;
+    const entrante = variableEntrante(actual, { excluir, bland });
     const razones = calcularRazones(actual, entrante.columna);
     const saliente = variableSaliente(razones);
 

@@ -52,9 +52,9 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 4 — Minimización
 
-- [ ] **BE-4.1** Conversión documentada `MIN Z` → `MAX (−Z)`.
-- [ ] **BE-4.2** Revertir el signo de Z al presentar el resultado.
-- [ ] **BE-4.3** Caso de prueba con resultado conocido.
+- [x] **BE-4.1** Conversión documentada `MIN Z` → `MAX (−Z)`.
+- [x] **BE-4.2** Revertir el signo de Z al presentar el resultado.
+- [x] **BE-4.3** Caso de prueba con resultado conocido.
 
 ## Épica 5 — Método de dos fases
 
@@ -66,12 +66,12 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 6 — Casos límite
 
-- [ ] **BE-6.1** Problema no acotado.
-- [ ] **BE-6.2** Problema infactible.
-- [ ] **BE-6.3** Degeneración y empates en la razón mínima (criterio documentado).
-- [ ] **BE-6.4** Restricción `=` activa (solución no básica).
-- [ ] **BE-6.5** Seis variables y cuatro restricciones sin errores.
-- [ ] **BE-6.6** Protección anti-ciclos (regla de Bland) y tope de iteraciones.
+- [x] **BE-6.1** Problema no acotado.
+- [x] **BE-6.2** Problema infactible.
+- [x] **BE-6.3** Degeneración y empates en la razón mínima (criterio documentado).
+- [x] **BE-6.4** Restricción `=` activa (solución no básica).
+- [x] **BE-6.5** Seis variables y cuatro restricciones sin errores.
+- [x] **BE-6.6** Protección anti-ciclos (regla de Bland) y tope de iteraciones.
 
 ## Épica 7 — API HTTP
 
