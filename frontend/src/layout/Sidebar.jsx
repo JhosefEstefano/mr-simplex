@@ -72,7 +72,7 @@ export function Sidebar({
   onAbrirTransporte
 }) {
   return (
-    <aside className="flex w-[245px] shrink-0 flex-col border-r border-border bg-card">
+    <aside className="hidden w-[245px] shrink-0 flex-col border-r border-border bg-card lg:flex">
       <div className="flex items-center gap-2.5 px-5 py-4">
         <span className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-primary text-primary-foreground">
           <BarChart3 size={17} aria-hidden="true" />

@@ -156,7 +156,7 @@ function Aplicacion() {
           puedeGuardar={Boolean(respuesta)}
         />
 
-        <main className="flex-1 px-8 py-6">
+        <main className="flex-1 px-4 py-6 sm:px-8">
           <div className="mx-auto flex w-full max-w-[1250px] flex-col gap-5">
             <header className="flex flex-col gap-1.5">
               <p className="text-[11px] font-bold uppercase tracking-wider text-primary">

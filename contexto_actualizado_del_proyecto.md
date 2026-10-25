@@ -1,8 +1,8 @@
 # Linear Studio — Full Project Context & Specification Export (Actualizado)
 
-> **Usage Note:** This document serves as a complete handoff context for LLMs/Prompts in ongoing sessions. It encompasses the system architecture, mathematical rules, visual design guidelines, database schemas, and the current state where the **Backend is fully implemented and tested** and development is moving to the Frontend.
+> **Usage Note:** This document serves as a complete handoff context for LLMs/Prompts in ongoing sessions. It encompasses the system architecture, mathematical rules, visual design guidelines, database schemas, and the current state of the project.
 >
-> **Last verified against the code:** 25 oct 2026. Every claim marked ✅ below was checked against `backend/` (271 automated tests, 97.7 % coverage).
+> **Last verified against the code:** 25 oct 2026. Every claim marked ✅ below was checked against the repository (`backend/` + `frontend/`): **271 backend tests** and **39 frontend tests**, all green.
 
 ---
 
@@ -11,9 +11,10 @@
 - **Course:** Operations Research (Investigación de Operaciones) — Universidad Mariano Gálvez de Guatemala (UMG).
 - **Core Objective:** Web system for linear programming (LP) optimization solving Maximization and Minimization models via the Simplex Method, exhibiting step-by-step tableau iterations, two-phase method execution, slack/shadow-price analysis, and final interpretations.
 - **Tech Stack (MERN):**
-  - **Frontend (Pending):** React (Vite) + Tailwind CSS + shadcn/ui design language + Lucide React Icons.
+  - **Frontend (Completed ✅):** React 19 + Vite 8 + Tailwind CSS 4 + Lucide React icons, following the shadcn/ui design language.
   - **Backend (Completed ✅):** Node.js 24 + Express 4 + custom mathematical Simplex engine (`src/services/simplex.js`).
   - **Database (Completed ✅):** MongoDB 8 + Mongoose 8, with an idempotent seed script.
+- **Repository:** `https://github.com/JhosefEstefano/mr-simplex` (branch `main`).
 
 ---
 
@@ -91,47 +92,45 @@ Active schemas in MongoDB via Mongoose:
   - Borders: `#E2E8F0` (`border-slate-200`)
   - Typography Main: Inter | Monospace for math/tables: SFMono/Consolas.
   - Functional Semantics: Green (Success), Yellow/Amber (Warning), Red (Error). No decorational gradients or harsh shadows.
+- **Implementation ✅:** the tokens live once in `frontend/src/styles/tokens.css` and Tailwind 4 exposes them as utilities (`bg-background`, `text-foreground`, `border-border`, `bg-primary`, `bg-primary-soft`, `bg-success-soft`…). Components (Button, Input, Card, Badge, Alert, SelectorObjetivo) follow the shadcn/ui pattern with the exact radii, font sizes and hover states of the guide.
 
 ---
 
-## 5. User Interface Step Flow & Layout (Frontend - Por hacer)
+## 5. User Interface Step Flow & Layout (✅ Implementado)
 
-1. **Step 1: Ingreso de datos (Data Entry)**
-   - Form for dynamic variable selection (2–6), Maximization/Minimization choice, objective function `Z`, dynamic restriction rows (`≤`, `≥`, `=`). Real-time live mathematical equation preview.
-2. **Step 2: Modelo y tabla inicial (Standard Form)**
-   - Shows converted canonical/standard model with slack/excess/artificial variables and initial Simplex Tableau (labelled `Z`, `Z′` or `W` depending on the phase).
-3. **Step 3: Pivoteo (Pivoting & Iterations)**
-   - Step-by-step iteration viewer with badge markers (`ITERACIÓN n DE N`, phase badge), entering/leaving variable cards, ratio test output, pivot cell highlighting, and elementary row operation steps.
-4. **Step 4: Resultado final (Final Results & Analysis)**
-   - Optimal `Z` value summary cards, variable values (`a`–`f`), slack details, restriction active/inactive verification table, shadow prices, decimal-precision selector.
+1. **Step 1: Ingreso de datos** — Variable selector (2–6), Maximize/Minimize, objective coefficients, dynamic restriction rows (`≤`, `≥`, `=`), live preview of the equations and client-side validation with the backend's own messages. **Preparar modelo** calls `POST /api/resolver`.
+2. **Step 2: Modelo y tabla inicial** — Objective function, standard-form system of equations, slack/excess/artificial panel and the starting tableau (labelled `Z`, `Z′` or `W` depending on the phase).
+3. **Step 3: Pivoteo** — `ITERACIÓN n DE N` badge plus phase badge, entering/leaving/pivot cards, ratio test table, numbered row operations, before/after tables with the pivot row, column and cell highlighted, and iteration navigation (previous / next / jump).
+4. **Step 4: Resultado final** — Status alert, metric cards (`Z`, variables, slacks), restriction verification table with the active flag, interpretation, shadow-price table, decimal-precision selector and the actions *Ver iteraciones*, *Exportar resumen* and *Nuevo modelo*.
+
+**Also implemented ✅:** session (login / register / password recovery), persistence (save, list, reopen without recalculating, delete), and the responsive treatment (two columns on desktop, one column on tablet/mobile, tables with `overflow-x: auto`).
 
 ---
 
-## 6. Functional Expansion Plan: Logistics & Transportation Module (Frontend - Por hacer)
+## 6. Functional Expansion: Logistics & Transportation Module (✅ Implementado)
 
-Transportation problems are mapped to the existing `/api/resolver` through a frontend compiler:
+The transportation module is reachable from a card in the sidebar.
 
-- **UI Matrix Representation:** User sets Origins (Supply) and Destinations (Demand) with a route cost matrix.
-- **Automatic Auto-compilation:** The frontend transforms the matrix into variables `x_ij` (sent as `nombresVariables`, which the backend now accepts ✅), minimizing `Σ c_ij x_ij`, generating supply (`≤`) and demand (`=`) constraints.
-- **Result Presentation:** Interpreted back as a visual Shipping Schedule/Matrix alongside the standard tableau proofs.
+- **UI Matrix Representation ✅:** the user sets origins (supply) and destinations (demand) with a route cost matrix.
+- **Automatic Auto-compilation ✅:** the frontend transforms the matrix into variables `x_ij` (sent as `nombresVariables`), minimizing `Σ c_ij x_ij`, generating supply (`≤`) and demand (`=`) constraints.
+- **Result Presentation ✅:** interpreted back as a shipping schedule matrix with the total cost, plus a link that opens the full Simplex procedure of the compiled model.
 
-> **Backend readiness ✅:** variable names, validation and every textual output already support custom variable names and the `=` constraints required by the demand rows.
+> **Verified end to end:** a 2×2 instance (`O1: 20, O2: 30` · `D1: 12, D2: 18` · costs `[[4,6],[5,3]]`) is solved by the backend with both phases in 7 iterations → optimal cost **102**, assignment `x₁₁ = 12`, `x₂₂ = 18`, and demand shadow prices **4** and **3** (the classic transportation dual).
 
 ---
 
 ## 7. Current Project Progress & Next Steps (UPDATED)
 
 ### 7.1 Completed ✅
-- **Backend:** Express server, MongoDB connection, JWT authentication with bcrypt, the custom `simplex.js` engine with exact fractions and the two-phase method, per-iteration history storage, shadow-price analysis, and custom variable names.
-- **Quality:** 271 automated tests (Vitest) across 19 files, 97.7 % coverage; the solver was additionally validated against a brute-force vertex enumeration over 1200 random models (max, min, `≤`, `≥`, `=`).
-- **Architecture & Design:** Visual design system and four-step flow defined.
+- **Backend:** Express server, MongoDB connection, JWT authentication with bcrypt, the custom `simplex.js` engine with exact fractions and the two-phase method, per-iteration history storage, shadow-price analysis and custom variable names.
+- **Frontend:** the four-step wizard, session, persistence and the transportation module, built on the design system tokens.
+- **Quality:** 271 backend tests + 39 frontend tests, 97.7 % backend coverage; the solver was additionally validated against a brute-force vertex enumeration over 1200 random models (max, min, `≤`, `≥`, `=`).
+- **Architecture & Design:** visual design system and four-step flow defined and implemented.
 
-### 7.2 Pending — Frontend Focus
-1. **Setup Frontend:** Initialize React + Vite project with Tailwind CSS and the shadcn/ui design language; define the design tokens once in the global CSS.
-2. **Auth Views:** Login, Register and Password Recovery screens (the API is ready; the recovery token is displayed in-app since there is no SMTP).
-3. **Simplex Views:** Implement the 4-step wizard UI (Data Entry → Initial Tableau → Iterations → Final Results), reading the values from the real API response.
-4. **Persistence UI:** Save / list / reload models, with the session state reflected in the top bar.
-5. **Transportation Module:** Matrix UI plus the compiler that turns it into a standard LP model before sending it to the backend.
+### 7.2 Remaining (optional polish)
+- Manual user guide (PDF) and screenshots for the deliverable.
+- Deployment (optional): the frontend on Vercel and the backend on a small instance with MongoDB Atlas.
+- Extra unit tests on the React components (the flow and the modules are already covered end to end).
 
 ### 7.3 Known Limitations (documented, intentional)
 - Password recovery returns the token in the response because no mail server is configured.

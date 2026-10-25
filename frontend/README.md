@@ -66,7 +66,23 @@ cp .env.example .env      # y ajusta VITE_API_URL si el backend está en otro la
 > El proyecto no incluye servidor de correo: la recuperación muestra el token en pantalla
 > (modo demostración), igual que en el backend.
 
-## 7. Sistema de diseño
+## 7. Módulo de transporte (extensión)
+
+El sidebar incluye una tarjeta de **Problema de transporte**, que abre un editor de matriz con
+las ofertas de cada origen, las demandas de cada destino y los costos de cada ruta.
+
+Al resolverlo, el frontend **compila** la matriz a un modelo de programación lineal:
+
+- una variable `x_ij` por ruta, con el costo como coeficiente de `Z`;
+- una restricción `≤` por origen, con su oferta;
+- una restricción `=` por destino, con su demanda;
+- objetivo `MIN` sobre el costo total.
+
+El modelo se envía a `POST /api/resolver` (con `nombresVariables` para que el backend use los
+nombres `x_ij`) y el resultado se lee como un **plan de envío**: la matriz de asignación, el
+costo total y las rutas con carga. Desde ahí se puede abrir el procedimiento simplex completo.
+
+## 8. Sistema de diseño
 
 Los tokens viven una sola vez en `src/styles/tokens.css` y Tailwind los expone como utilidades:
 
@@ -81,7 +97,7 @@ Los tokens viven una sola vez en `src/styles/tokens.css` y Tailwind los expone c
 Las fórmulas, las tablas y los coeficientes usan la clase `mono` (SFMono/Consolas); el resto usa
 Inter. Los iconos son de **Lucide**, nunca emojis.
 
-## 8. Estructura
+## 9. Estructura
 
 ```
 frontend/
@@ -103,18 +119,20 @@ frontend/
       TablaSimplex.jsx          # tabla con resaltado del pivote
       ModelosGuardados.jsx      # panel de persistencia
       PanelSesion.jsx           # login, registro y recuperación
+      EditorTransporte.jsx      # módulo de transporte
     estado/SimplexContexto.jsx  # estado global con reducer
     services/api.js             # llamadas al backend
-    utils/                      # fracción, modelo, textos y clases
+    utils/                      # fracción, modelo, transporte, textos y clases
   test/                         # pruebas (Vitest + Testing Library)
   HISTORIAS.md                  # control de avance por historia
 ```
 
-## 9. Pruebas
+## 10. Pruebas
 
 ```bash
 npm test
 ```
 
-Cubren las utilidades (fracción y modelo), el paso 1 (renderizado, validación en vivo y envío al
-backend) y un **recorrido completo** por los cuatro pasos con la respuesta real del solver.
+Cubren las utilidades (fracción, modelo y transporte), el paso 1 (renderizado, validación en vivo y
+envío al backend), el editor de transporte y un **recorrido completo** por los cuatro pasos con la
+respuesta real del solver.
