@@ -195,6 +195,10 @@ export function textosFormaEstandar(forma) {
       tipo: variable.tipo,
       restriccion: variable.restriccion,
       coeficiente: variable.coeficiente
-    }))
+    })),
+    nota:
+      forma.objetivoOriginal === 'MIN'
+        ? 'El modelo es de minimización: el tableau maximiza el objetivo auxiliar Z′ = −Z. Al final se revierte el signo para presentar el valor de Z.'
+        : undefined
   };
 }
