@@ -116,6 +116,14 @@ describe('simplex — registro de iteraciones (BE-3.8)', () => {
   });
 });
 
+describe('simplex — límites de seguridad', () => {
+  it('falla con un mensaje claro si se supera el límite de iteraciones', () => {
+    expect(() => resolver(MODELO_REFERENCIA, { limiteIteraciones: 1 })).toThrow(
+      /límite de iteraciones/
+    );
+  });
+});
+
 describe('simplex — iteración inicial (BE-3.9)', () => {
   const iteracion = resolver(MODELO_REFERENCIA).iteraciones[0];
 

@@ -174,10 +174,11 @@ function iteracionCambioDeFase(numero, tablaFase1, tablaFase2, decimales) {
  */
 function ejecutarIteraciones(tabla, iteraciones, decimales, opciones = {}) {
   const excluir = opciones.excluir ?? new Set();
+  const limite = opciones.limite ?? LIMITE_ITERACIONES;
   let actual = tabla;
   let numero = iteraciones.length;
 
-  for (let paso = 0; paso < LIMITE_ITERACIONES; paso += 1) {
+  for (let paso = 0; paso < limite; paso += 1) {
     if (esOptimo(actual, { excluir })) {
       return { estado: ESTADOS.OPTIMO, tabla: actual };
     }
@@ -336,6 +337,7 @@ function construirRespuesta({
  */
 export function resolver(modelo, opciones = {}) {
   const decimales = opciones.decimales ?? DECIMALES_POR_DEFECTO;
+  const limite = opciones.limiteIteraciones ?? LIMITE_ITERACIONES;
   const forma = construirFormaEstandar(modelo);
 
   const tablaInicial = crearTablaInicial(forma);
@@ -350,7 +352,7 @@ export function resolver(modelo, opciones = {}) {
   let tabla = tablaInicial;
 
   if (tabla.fase === 1) {
-    const fase1 = ejecutarIteraciones(tabla, iteraciones, decimales);
+    const fase1 = ejecutarIteraciones(tabla, iteraciones, decimales, { limite });
 
     if (!esCero(fase1.tabla.valorZ)) {
       const w = aTexto(fase1.tabla.valorZ.neg());
@@ -379,7 +381,8 @@ export function resolver(modelo, opciones = {}) {
   }
 
   const fase = ejecutarIteraciones(tabla, iteraciones, decimales, {
-    excluir: columnasArtificiales
+    excluir: columnasArtificiales,
+    limite
   });
   tabla = fase.tabla;
   const estado = fase.estado;

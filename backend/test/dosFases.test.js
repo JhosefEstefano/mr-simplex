@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { resolver } from '../src/services/simplex.js';
+import { expulsarArtificiales } from '../src/services/dosFases.js';
+import { fraccion } from '../src/utils/fraccion.js';
 import { ESTADOS } from '../src/constants/dominio.js';
 
 /**
@@ -91,6 +93,52 @@ describe('dos fases — fin de la Fase 1 (BE-5.2)', () => {
 
   it('no deja variables artificiales en la base', () => {
     expect(respuesta.tableauFinal.basicas).not.toContain('A1');
+  });
+});
+
+describe('dos fases — expulsión de las artificiales de la base (BE-5.2)', () => {
+  it('saca de la base una artificial que seguía siendo básica', () => {
+    // Tableau con A1 básica en la fila 1 y con un coeficiente no nulo
+    // en la columna 'a' de esa misma fila: se pivotea para expulsarla.
+    const tabla = {
+      fase: 1,
+      etiquetaObjetivo: 'W',
+      columnas: ['a', 'b', 'A1'],
+      basicas: ['A1', 's2'],
+      filas: [
+        [fraccion(2), fraccion(1), fraccion(1)],
+        [fraccion(0), fraccion(1), fraccion(0)]
+      ],
+      rhs: [fraccion(0), fraccion(4)],
+      filaZ: [fraccion(-1), fraccion(0), fraccion(0)],
+      valorZ: fraccion(0)
+    };
+
+    const resultado = expulsarArtificiales(tabla, new Set(['A1']));
+
+    expect(resultado.basicas).not.toContain('A1');
+    expect(resultado.basicas[0]).toBe('a');
+  });
+
+  it('elimina la fila cuando es redundante', () => {
+    const tabla = {
+      fase: 1,
+      etiquetaObjetivo: 'W',
+      columnas: ['a', 'A1'],
+      basicas: ['A1', 's2'],
+      filas: [
+        [fraccion(0), fraccion(1)],
+        [fraccion(1), fraccion(0)]
+      ],
+      rhs: [fraccion(0), fraccion(4)],
+      filaZ: [fraccion(0), fraccion(0)],
+      valorZ: fraccion(0)
+    };
+
+    const resultado = expulsarArtificiales(tabla, new Set(['A1']));
+
+    expect(resultado.basicas).toEqual(['s2']);
+    expect(resultado.filas).toHaveLength(1);
   });
 });
 

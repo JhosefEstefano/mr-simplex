@@ -222,6 +222,50 @@ describe('validarModelo — restricciones (BE-1.7)', () => {
   });
 });
 
+describe('validarModelo — restricciones incompletas', () => {
+  it('rechaza una restricción que no es un objeto', () => {
+    const modelo = modeloValido();
+    modelo.restricciones[1] = null;
+
+    const resultado = validarModelo(modelo);
+
+    expect(errorDe(resultado, 'restricciones[1]').mensaje).toContain('está incompleta');
+    expect(errorDe(resultado, 'restricciones[1]').restriccion).toBe(2);
+  });
+
+  it('rechaza una restricción sin lista de coeficientes', () => {
+    const modelo = modeloValido();
+    modelo.restricciones[0].coeficientes = undefined;
+
+    const resultado = validarModelo(modelo);
+
+    expect(errorDe(resultado, 'restricciones[0].coeficientes')).toBeDefined();
+  });
+
+  it('rechaza una restricción sin lista de coeficientes cuando el número de variables también falla', () => {
+    const modelo = modeloValido({ numVariables: 'tres' });
+    modelo.restricciones[0].coeficientes = undefined;
+
+    const resultado = validarModelo(modelo);
+
+    expect(errorDe(resultado, 'restricciones[0].coeficientes').mensaje).toContain(
+      'Ingresa los coeficientes de cada variable'
+    );
+  });
+});
+
+describe('validarModelo — modelo ausente o mal formado', () => {
+  it('rechaza un cuerpo que no es un objeto', () => {
+    for (const cuerpo of [null, undefined, 'texto', 42, []]) {
+      const resultado = validarModelo(cuerpo);
+
+      expect(resultado.valido).toBe(false);
+      expect(resultado.errores[0].campo).toBe('modelo');
+      expect(resultado.errores[0].mensaje).toContain('modelo completo');
+    }
+  });
+});
+
 describe('validarModelo — formato de la respuesta (BE-1.8)', () => {
   it('devuelve el estado ERROR_VALIDACION con la lista de errores', () => {
     const respuesta = respuestaDeValidacion([

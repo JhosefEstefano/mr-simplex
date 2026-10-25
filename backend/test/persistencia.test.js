@@ -174,6 +174,15 @@ describe.skipIf(!disponible)('persistencia — detalle de un modelo (BE-8.4)', (
 
     expect(status).toBe(404);
   });
+
+  it('devuelve 400 si el nombre es demasiado largo', async () => {
+    const { status, body } = await request(app)
+      .post('/api/modelos')
+      .send({ ...MODELO_MAX, nombre: 'x'.repeat(200) });
+
+    expect(status).toBe(400);
+    expect(body.mensaje).toContain('No se pudo guardar');
+  });
 });
 
 describe.skipIf(!disponible)('persistencia — editar un modelo (BE-8.5)', () => {
@@ -197,6 +206,11 @@ describe.skipIf(!disponible)('persistencia — editar un modelo (BE-8.5)', () =>
 
     expect(status).toBe(404);
   });
+  it('devuelve 404 si el identificador no es válido', async () => {
+    const { status } = await request(app).put('/api/modelos/no-es-un-id').send(MODELO_MAX);
+
+    expect(status).toBe(404);
+  });
 });
 
 describe.skipIf(!disponible)('persistencia — eliminar un modelo (BE-8.6)', () => {
@@ -212,6 +226,12 @@ describe.skipIf(!disponible)('persistencia — eliminar un modelo (BE-8.6)', () 
 
   it('devuelve 404 si el modelo no existe', async () => {
     const { status } = await request(app).delete('/api/modelos/64b7f9f8f8f8f8f8f8f8f8f8');
+
+    expect(status).toBe(404);
+  });
+
+  it('devuelve 404 si el identificador no es válido', async () => {
+    const { status } = await request(app).delete('/api/modelos/no-es-un-id');
 
     expect(status).toBe(404);
   });

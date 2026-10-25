@@ -1,6 +1,5 @@
 import {
   fraccion,
-  suma,
   resta,
   multiplica,
   divide,
@@ -208,27 +207,3 @@ export function pivotear(tabla, indiceFila, indiceColumna) {
 
   return { tabla: nueva, operaciones };
 }
-
-/**
- * Reconstruye la fila Z a partir de la base actual, para cambiar de objetivo
- * (por ejemplo, al pasar de la Fase 1 a la Fase 2).
- *
- * @param {object} tabla
- * @param {Array} coeficientesObjetivo
- * @param {Function} calcularFilaZ
- * @returns {object} tableau con la fila Z recalculada
- */
-export function recalcularFilaZ(tabla, coeficientesObjetivo, calcularFilaZ) {
-  const { filaZ, valor } = calcularFilaZ({
-    columnas: tabla.columnas,
-    basicas: tabla.basicas,
-    filas: tabla.filas,
-    rhs: tabla.rhs,
-    coeficientesObjetivo
-  });
-
-  return { ...tabla, filaZ, valorZ: valor };
-}
-
-/** Suma de dos valores fraccionarios, reexportada para el solver. */
-export { suma };
