@@ -162,7 +162,7 @@ export function Sidebar({
       <div className="border-t border-border-subtle px-5 py-3">
         <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           <BookOpen size={13} aria-hidden="true" />
-          Método simplex · Chamal &amp; Oliveira
+          Método simplex · Grupo #4
         </p>
         {usuario ? (
           <div className="mt-2 flex items-center justify-between gap-2">

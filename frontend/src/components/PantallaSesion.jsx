@@ -222,7 +222,7 @@ export default function PantallaSesion({ onSesionIniciada, mensaje }) {
         </div>
 
         <p className="mt-5 text-center text-[11px] text-muted-foreground">
-          Método simplex · Chamal &amp; Oliveira
+          Método simplex · Grupo #4
         </p>
       </div>
     </main>
