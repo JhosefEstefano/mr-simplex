@@ -84,13 +84,13 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 8 — Persistencia (MongoDB) — *bloqueada hasta tener MongoDB*
 
-- [ ] **BE-8.1** Esquema Mongoose `Modelo` con sus validaciones.
-- [ ] **BE-8.2** `POST /api/modelos` guarda el modelo con la resolución embebida.
-- [ ] **BE-8.3** `GET /api/modelos` lista los modelos guardados.
-- [ ] **BE-8.4** `GET /api/modelos/:id` devuelve el detalle; 404 si no existe.
-- [ ] **BE-8.5** `PUT /api/modelos/:id` actualiza y vuelve a resolver.
-- [ ] **BE-8.6** `DELETE /api/modelos/:id` elimina; 404 si no existe.
-- [ ] **BE-8.7** `seed/seed.js` idempotente con un modelo MAX y uno MIN.
+- [x] **BE-8.1** Esquema Mongoose `Modelo` con sus validaciones.
+- [x] **BE-8.2** `POST /api/modelos` guarda el modelo con la resolución embebida.
+- [x] **BE-8.3** `GET /api/modelos` lista los modelos guardados.
+- [x] **BE-8.4** `GET /api/modelos/:id` devuelve el detalle; 404 si no existe.
+- [x] **BE-8.5** `PUT /api/modelos/:id` actualiza y vuelve a resolver.
+- [x] **BE-8.6** `DELETE /api/modelos/:id` elimina; 404 si no existe.
+- [x] **BE-8.7** `seed/seed.js` idempotente con un modelo MAX y uno MIN.
 
 ## Épica 9 — Cierre
 
