@@ -32,6 +32,48 @@ function verificar(nombre, condicion, detalle = '') {
 // 'msedge' usa el Edge ya instalado; en Linux basta con BROWSER_CHANNEL=chromium
 // (previa instalación de los binarios con `npx playwright install chromium`).
 const CANAL = process.env.BROWSER_CHANNEL ?? 'msedge';
+
+/**
+ * Llena el formulario del paso 1 con un modelo y lo prepara.
+ * @param {object} modelo {numVariables, objetivo, coeficientesZ, restricciones}
+ */
+async function prepararModelo(modelo) {
+  await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
+  await pagina.waitForSelector('h1');
+
+  const variables = ['a', 'b', 'c', 'd', 'e', 'f'].slice(0, modelo.numVariables);
+
+  if (modelo.objetivo === 'MIN') {
+    await pagina.getByRole('button', { name: /^Minimizar/ }).click();
+  }
+
+  for (let indice = 0; indice < variables.length; indice += 1) {
+    await pagina
+      .getByLabel(`Coeficiente de Z para la variable ${variables[indice]}`)
+      .fill(String(modelo.coeficientesZ[indice]));
+  }
+
+  for (let fila = 0; fila < modelo.restricciones.length; fila += 1) {
+    if (fila > 0) await pagina.getByRole('button', { name: /^Agregar/ }).click();
+
+    const restriccion = modelo.restricciones[fila];
+
+    for (let columna = 0; columna < variables.length; columna += 1) {
+      await pagina
+        .getByLabel(`Coeficiente de la variable ${variables[columna]} en la restricción ${fila + 1}`)
+        .fill(String(restriccion.coeficientes[columna]));
+    }
+
+    await pagina.getByLabel(`Signo de la restricción ${fila + 1}`).selectOption(restriccion.signo);
+    await pagina
+      .getByLabel(`Término independiente de la restricción ${fila + 1}`)
+      .fill(String(restriccion.rhs));
+  }
+
+  await pagina.getByRole('button', { name: /Preparar modelo/i }).click();
+  await pagina.waitForSelector('h1:has-text("Modelo y tabla inicial")', { timeout: 20000 });
+}
+
 const navegador = await chromium.launch({ channel: CANAL });
 const contexto = await navegador.newContext({
   viewport: { width: 1440, height: 940 },
@@ -180,6 +222,86 @@ try {
   );
   await capturarPanel('10-transporte-procedimiento.png');
 
+
+  /* ---------------------------------------------------------------- */
+  console.log('\n▶ Casos especiales (Alejandro)');
+
+  await prepararModelo({
+    numVariables: 2,
+    objetivo: 'MAX',
+    coeficientesZ: [3, 5],
+    restricciones: [
+      { coeficientes: [1, 0], signo: '<=', rhs: 4 },
+      { coeficientes: [0, 1], signo: '>=', rhs: 2 }
+    ]
+  });
+  await pagina.getByRole('button', { name: /Ver pivoteo/i }).click();
+  await pagina.waitForSelector('h1:has-text("Pivoteo")');
+  await pagina.waitForTimeout(400);
+  verificar('Detecta el problema no acotado', await pagina.isVisible('text=no está acotado'));
+  await capturar('20-alejandro-no-acotado.png');
+
+  await prepararModelo({
+    numVariables: 2,
+    objetivo: 'MAX',
+    coeficientesZ: [1, 1],
+    restricciones: [
+      { coeficientes: [1, 1], signo: '>=', rhs: 4 },
+      { coeficientes: [1, 1], signo: '<=', rhs: 2 }
+    ]
+  });
+  await pagina.getByRole('button', { name: /Ver pivoteo/i }).click();
+  await pagina.waitForSelector('h1:has-text("Pivoteo")');
+  await pagina.waitForTimeout(400);
+  verificar('Detecta el problema infactible', await pagina.isVisible('text=es infactible'));
+  await capturar('21-alejandro-infactible.png');
+
+  await prepararModelo({
+    numVariables: 2,
+    objetivo: 'MAX',
+    coeficientesZ: [1, 1],
+    restricciones: [
+      { coeficientes: [1, 1], signo: '<=', rhs: 4 },
+      { coeficientes: [1, 0], signo: '<=', rhs: 3 },
+      { coeficientes: [0, 1], signo: '<=', rhs: 3 }
+    ]
+  });
+  await pagina.getByRole('button', { name: /Ver pivoteo/i }).click();
+  await pagina.waitForSelector('h1:has-text("Pivoteo")');
+  await pagina.getByRole('button', { name: /Ver resultado/i }).click();
+  await pagina.waitForSelector('h1:has-text("Resultado final")');
+  await pagina.waitForTimeout(400);
+  verificar(
+    'Detecta las soluciones óptimas alternativas',
+    await pagina.isVisible('text=soluciones óptimas alternativas')
+  );
+  await capturar('22-alejandro-multiples.png');
+
+  /* ---------------------------------------------------------------- */
+  console.log('\n▶ Minimización y análisis (Jonnathan)');
+
+  await prepararModelo({
+    numVariables: 2,
+    objetivo: 'MIN',
+    coeficientesZ: [2, 3],
+    restricciones: [
+      { coeficientes: [1, 1], signo: '>=', rhs: 4 },
+      { coeficientes: [2, 1], signo: '<=', rhs: 10 },
+      { coeficientes: [1, 2], signo: '<=', rhs: 8 }
+    ]
+  });
+  verificar(
+    'Explica la conversión de minimizar a maximizar',
+    await pagina.isVisible('text=/minimización/i')
+  );
+  await capturar('23-jonnathan-minimizacion.png');
+
+  await pagina.getByRole('button', { name: /Ver resultado/i }).click();
+  await pagina.waitForSelector('h1:has-text("Resultado final")');
+  await pagina.waitForTimeout(400);
+  verificar('Muestra los precios sombra', await pagina.isVisible('text=Precios sombra'));
+  await capturar('24-jonnathan-precios-sombra.png');
+
   /* ---------------------------------------------------------------- */
   console.log('\n▶ Sesión');
   await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
@@ -195,7 +317,6 @@ try {
 } finally {
   await navegador.close();
 }
-
 const fallos = pruebas.filter((prueba) => !prueba.ok);
 
 console.log(`\n${'─'.repeat(60)}`);

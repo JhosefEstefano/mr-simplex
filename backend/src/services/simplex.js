@@ -1,4 +1,15 @@
-import { fraccion, suma, multiplica, negada, esCero, esNegativo, aTexto, valor, DECIMALES_POR_DEFECTO } from '../utils/fraccion.js';
+import {
+  fraccion,
+  suma,
+  multiplica,
+  negada,
+  esCero,
+  esPositivo,
+  esNegativo,
+  aTexto,
+  valor,
+  DECIMALES_POR_DEFECTO
+} from '../utils/fraccion.js';
 import { construirFormaEstandar, textosModelo, textosFormaEstandar } from './formaEstandar.js';
 import { crearTablaInicial, serializarTabla } from './tabla.js';
 import { esOptimo, variableEntrante, calcularRazones, variableSaliente, pivotear } from './pivoteo.js';
@@ -341,6 +352,47 @@ function explicarPreciosSombra(precios) {
   return `${base} Por ejemplo, ${ejemplos.join('; ')}.`;
 }
 
+/**
+ * Detecta si la solución óptima es única.
+ *
+ * Una variable no básica con costo reducido 0 puede entrar en la base sin
+ * cambiar el valor de Z: si la prueba de razones da un límite estrictamente
+ * positivo, al pivotear se obtiene otra solución óptima distinta.
+ *
+ * @param {object} tabla tableau final
+ * @returns {string[]} variables que generan soluciones alternativas
+ */
+function detectarSolucionesMultiples(tabla) {
+  const alternativas = [];
+  const basicas = new Set(tabla.basicas);
+
+  tabla.columnas.forEach((columna, indice) => {
+    if (basicas.has(columna)) return;
+    if (!esCero(tabla.filaZ[indice])) return;
+
+    const razones = calcularRazones(tabla, indice);
+    const saliente = variableSaliente(razones);
+
+    // Un límite de cero sería un pivote degenerado: no da una solución nueva.
+    if (saliente && esPositivo(saliente.razon)) {
+      alternativas.push(columna);
+    }
+  });
+
+  return alternativas;
+}
+
+/** Explica en español si la solución óptima es única o hay alternativas. */
+function explicarSolucionesMultiples(alternativas) {
+  if (alternativas.length === 0) {
+    return 'La solución óptima es única: no hay otras soluciones con el mismo valor de Z.';
+  }
+
+  const lista = alternativas.join(', ');
+
+  return `Hay soluciones óptimas alternativas: las variables ${lista} pueden cambiar de valor sin modificar el valor de Z, porque su costo reducido es cero.`;
+}
+
 /** Arma el bloque de resultado con valores, holguras, verificación e interpretación. */
 function calcularResultado(modelo, forma, tabla, decimales) {
   const valores = valoresDeVariables(tabla);
@@ -392,6 +444,7 @@ function calcularResultado(modelo, forma, tabla, decimales) {
   });
 
   const precios = calcularPreciosSombra(forma, tabla, esMinimizacion);
+  const alternativas = detectarSolucionesMultiples(tabla);
 
   return {
     z: valor(z, decimales),
@@ -401,6 +454,11 @@ function calcularResultado(modelo, forma, tabla, decimales) {
     artificiales,
     verificacion,
     interpretacion: construirInterpretacion(modelo, forma, valores, z, verificacion),
+    solucionesMultiples: {
+      hayAlternativas: alternativas.length > 0,
+      variables: alternativas,
+      interpretacion: explicarSolucionesMultiples(alternativas)
+    },
     sensibilidad: {
       preciosSombra: precios.map((precio) => ({
         restriccion: precio.restriccion,

@@ -88,6 +88,14 @@ export default function PasoResultado() {
         />
       )}
 
+      {resultado.solucionesMultiples?.hayAlternativas ? (
+        <Alert
+          variante="advertencia"
+          titulo="Hay soluciones óptimas alternativas"
+          descripcion={resultado.solucionesMultiples.interpretacion}
+        />
+      ) : null}
+
       {resultado ? (
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="flex flex-col gap-5">
