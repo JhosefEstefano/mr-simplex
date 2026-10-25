@@ -14,15 +14,15 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 1 — Validación del modelo
 
-- [ ] **BE-1.1** `numVariables` entre 2 y 6.
-- [ ] **BE-1.2** `objetivo` ∈ {MAX, MIN}.
-- [ ] **BE-1.3** `coeficientesZ`: longitud = numVariables y valores numéricos finitos.
-- [ ] **BE-1.4** Coeficientes de cada restricción: longitud = numVariables y valores numéricos.
-- [ ] **BE-1.5** `signo` ∈ {`<=`, `>=`, `=`}.
-- [ ] **BE-1.6** `rhs` presente y numérico.
-- [ ] **BE-1.7** Al menos una restricción.
-- [ ] **BE-1.8** Formato de error `{ estado: "ERROR_VALIDACION", errores: [...] }` en español.
-- [ ] **BE-1.9** Acumular todos los errores (no fallar en el primero).
+- [x] **BE-1.1** `numVariables` entre 2 y 6.
+- [x] **BE-1.2** `objetivo` ∈ {MAX, MIN}.
+- [x] **BE-1.3** `coeficientesZ`: longitud = numVariables y valores numéricos finitos.
+- [x] **BE-1.4** Coeficientes de cada restricción: longitud = numVariables y valores numéricos.
+- [x] **BE-1.5** `signo` ∈ {`<=`, `>=`, `=`}.
+- [x] **BE-1.6** `rhs` presente y numérico.
+- [x] **BE-1.7** Al menos una restricción.
+- [x] **BE-1.8** Formato de error `{ estado: "ERROR_VALIDACION", errores: [...] }` en español.
+- [x] **BE-1.9** Acumular todos los errores (no fallar en el primero).
 
 ## Épica 2 — Forma estándar y tabla inicial
 
