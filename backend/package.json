@@ -1,0 +1,31 @@
+{
+  "name": "linear-studio-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "API de Linear Studio: resuelve modelos de programación lineal con el método simplex y expone el procedimiento iteración por iteración.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "seed": "node seed/seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "fraction.js": "^5.3.4",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
