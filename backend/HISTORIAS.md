@@ -58,11 +58,11 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 5 — Método de dos fases
 
-- [ ] **BE-5.1** Fase 1: objetivo `W = Σ artificiales` e iteraciones marcadas con `fase: 1`.
-- [ ] **BE-5.2** Expulsar las artificiales de la base al terminar la Fase 1.
-- [ ] **BE-5.3** Artificial con valor > 0 → `INFACTIBLE` (devolviendo las iteraciones realizadas).
-- [ ] **BE-5.4** Fase 2: restaurar el objetivo original y continuar con `fase: 2`.
-- [ ] **BE-5.5** Caso de prueba MIN con `≥` resuelto en dos fases.
+- [x] **BE-5.1** Fase 1: objetivo `W = Σ artificiales` e iteraciones marcadas con `fase: 1`.
+- [x] **BE-5.2** Expulsar las artificiales de la base al terminar la Fase 1.
+- [x] **BE-5.3** Artificial con valor > 0 → `INFACTIBLE` (devolviendo las iteraciones realizadas).
+- [x] **BE-5.4** Fase 2: restaurar el objetivo original y continuar con `fase: 2`.
+- [x] **BE-5.5** Caso de prueba MIN con `≥` resuelto en dos fases.
 
 ## Épica 6 — Casos límite
 

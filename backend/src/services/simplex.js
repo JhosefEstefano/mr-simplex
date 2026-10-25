@@ -2,6 +2,7 @@ import { fraccion, suma, multiplica, esCero, aTexto, valor, DECIMALES_POR_DEFECT
 import { construirFormaEstandar, textosModelo, textosFormaEstandar } from './formaEstandar.js';
 import { crearTablaInicial, serializarTabla } from './tabla.js';
 import { esOptimo, variableEntrante, calcularRazones, variableSaliente, pivotear } from './pivoteo.js';
+import { expulsarArtificiales, iniciarFase2 } from './dosFases.js';
 import { ESTADOS, TIPOS_VARIABLE } from '../constants/dominio.js';
 
 /** Tope de iteraciones: red de seguridad ante cualquier ciclo. */
@@ -139,23 +140,43 @@ function construirIteracionNoAcotada({
   };
 }
 
+/** Registro del paso de la Fase 1 a la Fase 2. */
+function iteracionCambioDeFase(numero, tablaFase1, tablaFase2, decimales) {
+  return {
+    numero,
+    fase: 2,
+    cambioDeFase: true,
+    tablaAntes: serializarTabla(tablaFase1, decimales),
+    entrante: null,
+    razones: [],
+    saliente: null,
+    pivote: null,
+    operaciones: [],
+    tablaDespues: serializarTabla(tablaFase2, decimales),
+    explicacion:
+      'Fin de la Fase 1: W = 0, así que el problema es factible. Se descarta el objetivo W y comienza la Fase 2 con el objetivo Z.'
+  };
+}
+
 /**
  * Ejecuta el ciclo del simplex sobre un tableau y registra cada iteración.
  * @param {object} tabla
  * @param {Array} iteraciones
  * @param {number} decimales
+ * @param {{excluir?: Set<string>}} [opciones] columnas que no pueden entrar
  * @returns {{estado: string, tabla: object}}
  */
-function ejecutarIteraciones(tabla, iteraciones, decimales) {
+function ejecutarIteraciones(tabla, iteraciones, decimales, opciones = {}) {
+  const excluir = opciones.excluir ?? new Set();
   let actual = tabla;
   let numero = iteraciones.length;
 
   for (let paso = 0; paso < LIMITE_ITERACIONES; paso += 1) {
-    if (esOptimo(actual)) {
+    if (esOptimo(actual, { excluir })) {
       return { estado: ESTADOS.OPTIMO, tabla: actual };
     }
 
-    const entrante = variableEntrante(actual);
+    const entrante = variableEntrante(actual, { excluir });
     const razones = calcularRazones(actual, entrante.columna);
     const saliente = variableSaliente(razones);
 
@@ -227,14 +248,14 @@ function calcularResultado(modelo, forma, tabla, decimales) {
   });
 
   const holguras = {};
-  const excedentes = {};
+  const excesos = {};
   const artificiales = {};
 
   forma.variablesAgregadas.forEach((variable) => {
     const dato = valor(valores[variable.nombre], decimales);
 
     if (variable.tipo === TIPOS_VARIABLE.HOLGURA) holguras[variable.nombre] = dato;
-    if (variable.tipo === TIPOS_VARIABLE.EXCESO) excedentes[variable.nombre] = dato;
+    if (variable.tipo === TIPOS_VARIABLE.EXCESO) excesos[variable.nombre] = dato;
     if (variable.tipo === TIPOS_VARIABLE.ARTIFICIAL) artificiales[variable.nombre] = dato;
   });
 
@@ -269,7 +290,7 @@ function calcularResultado(modelo, forma, tabla, decimales) {
     z: valor(z, decimales),
     variables,
     holguras,
-    excedentes,
+    excesos,
     artificiales,
     verificacion,
     interpretacion: construirInterpretacion(modelo, forma, valores, z, verificacion)
@@ -310,13 +331,51 @@ export function resolver(modelo, opciones = {}) {
   const decimales = opciones.decimales ?? DECIMALES_POR_DEFECTO;
   const forma = construirFormaEstandar(modelo);
 
-  if (forma.requiereFase1) {
-    throw new Error('El método de dos fases todavía no está implementado (BE-5.1).');
-  }
-
   const tablaInicial = crearTablaInicial(forma);
   const iteraciones = [iteracionInicial(tablaInicial, decimales)];
-  const { estado, tabla } = ejecutarIteraciones(tablaInicial, iteraciones, decimales);
+
+  const columnasArtificiales = new Set(
+    forma.variablesAgregadas
+      .filter((variable) => variable.tipo === TIPOS_VARIABLE.ARTIFICIAL)
+      .map((variable) => variable.nombre)
+  );
+
+  let tabla = tablaInicial;
+
+  if (tabla.fase === 1) {
+    const fase1 = ejecutarIteraciones(tabla, iteraciones, decimales);
+
+    if (!esCero(fase1.tabla.valorZ)) {
+      const w = aTexto(fase1.tabla.valorZ.neg());
+      return construirRespuesta({
+        estado: ESTADOS.INFACTIBLE,
+        mensaje: `El problema es infactible: al terminar la Fase 1 las variables artificiales siguen con valor positivo (W = ${bonito(
+          w
+        )}), lo que significa que las restricciones son contradictorias.`,
+        modelo,
+        forma,
+        iteraciones,
+        tablaFinal: fase1.tabla,
+        resultado: null,
+        decimales
+      });
+    }
+
+    const sinArtificiales = expulsarArtificiales(fase1.tabla, columnasArtificiales);
+    const tablaFase2 = iniciarFase2(sinArtificiales, forma, columnasArtificiales);
+
+    iteraciones.push(
+      iteracionCambioDeFase(iteraciones.length, fase1.tabla, tablaFase2, decimales)
+    );
+
+    tabla = tablaFase2;
+  }
+
+  const fase = ejecutarIteraciones(tabla, iteraciones, decimales, {
+    excluir: columnasArtificiales
+  });
+  tabla = fase.tabla;
+  const estado = fase.estado;
 
   if (estado === ESTADOS.NO_ACOTADO) {
     return construirRespuesta({

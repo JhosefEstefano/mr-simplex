@@ -16,10 +16,15 @@ import {
  * óptima cuando todos los coeficientes de la fila Z son no negativos.
  *
  * @param {object} tabla
+ * @param {{excluir?: Set<string>}} [opciones] columnas que no participan (p. ej. artificiales)
  * @returns {boolean}
  */
-export function esOptimo(tabla) {
-  return tabla.filaZ.every((coeficiente) => !esNegativo(coeficiente));
+export function esOptimo(tabla, opciones = {}) {
+  const excluidas = opciones.excluir ?? new Set();
+
+  return tabla.filaZ.every(
+    (coeficiente, columna) => excluidas.has(tabla.columnas[columna]) || !esNegativo(coeficiente)
+  );
 }
 
 /**
@@ -27,12 +32,15 @@ export function esOptimo(tabla) {
  * Los empates se resuelven por la columna más a la izquierda.
  *
  * @param {object} tabla
+ * @param {{excluir?: Set<string>}} [opciones]
  * @returns {{columna: number, nombre: string, coeficiente: object}|null}
  */
-export function variableEntrante(tabla) {
+export function variableEntrante(tabla, opciones = {}) {
+  const excluidas = opciones.excluir ?? new Set();
   let mejor = null;
 
   tabla.filaZ.forEach((coeficiente, columna) => {
+    if (excluidas.has(tabla.columnas[columna])) return;
     if (!esNegativo(coeficiente)) return;
     if (mejor === null || compara(coeficiente, tabla.filaZ[mejor]) < 0) mejor = columna;
   });
@@ -102,7 +110,7 @@ export function variableSaliente(razones) {
 }
 
 /** Copia profunda del tableau para poder pivotear sin mutar el original. */
-function clonarTabla(tabla) {
+export function clonarTabla(tabla) {
   return {
     ...tabla,
     columnas: [...tabla.columnas],
