@@ -26,14 +26,14 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 2 — Forma estándar y tabla inicial
 
-- [ ] **BE-2.1** Nombres de las variables de decisión `a..f` según `numVariables`.
-- [ ] **BE-2.2** Restricción `≤` agrega variable de holgura `s_i`.
-- [ ] **BE-2.3** Restricción `≥` agrega variable de exceso `e_i` (coeficiente −1) y artificial `A_i`.
-- [ ] **BE-2.4** Restricción `=` agrega variable artificial `A_i`.
-- [ ] **BE-2.5** Matriz del tableau inicial: filas de restricciones, columna rhs, variables básicas.
-- [ ] **BE-2.6** Fila Z con signo: `Z − 3a − 5b = 0`.
-- [ ] **BE-2.7** Textos del modelo y de la forma estándar (`funcionObjetivo`, `restricciones`, `ecuaciones`, …).
-- [ ] **BE-2.8** Serialización del tableau (`encabezados`, `basicas`, `filas`, `filaZ`).
+- [x] **BE-2.1** Nombres de las variables de decisión `a..f` según `numVariables`.
+- [x] **BE-2.2** Restricción `≤` agrega variable de holgura `s_i`.
+- [x] **BE-2.3** Restricción `≥` agrega variable de exceso `e_i` (coeficiente −1) y artificial `A_i`.
+- [x] **BE-2.4** Restricción `=` agrega variable artificial `A_i`.
+- [x] **BE-2.5** Matriz del tableau inicial: filas de restricciones, columna rhs, variables básicas.
+- [x] **BE-2.6** Fila Z con signo: `Z − 3a − 5b = 0`.
+- [x] **BE-2.7** Textos del modelo y de la forma estándar (`funcionObjetivo`, `restricciones`, `ecuaciones`, …).
+- [x] **BE-2.8** Serialización del tableau (`encabezados`, `basicas`, `filas`, `filaZ`).
 
 ## Épica 3 — Núcleo del solver (MAX, una fase)
 
