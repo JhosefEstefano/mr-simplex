@@ -1,6 +1,8 @@
 import {
   MIN_VARIABLES,
   MAX_VARIABLES,
+  MAX_VARIABLES_EXTENDIDAS,
+  PATRON_NOMBRE_VARIABLE,
   OBJETIVOS,
   SIGNOS,
   ESTADOS,
@@ -52,16 +54,50 @@ export function validarModelo(modelo) {
 
   // 1. Número de variables
   const cantidadNumerica = Number.isInteger(modelo.numVariables) ? modelo.numVariables : null;
+  const tieneNombresPropios = Array.isArray(modelo.nombresVariables);
+  const maximoVariables = tieneNombresPropios ? MAX_VARIABLES_EXTENDIDAS : MAX_VARIABLES;
 
   if (
     cantidadNumerica === null ||
     cantidadNumerica < MIN_VARIABLES ||
-    cantidadNumerica > MAX_VARIABLES
+    cantidadNumerica > maximoVariables
   ) {
     errores.push({
       campo: 'numVariables',
-      mensaje: `Selecciona entre ${MIN_VARIABLES} y ${MAX_VARIABLES} variables.`
+      mensaje: tieneNombresPropios
+        ? `Selecciona entre ${MIN_VARIABLES} y ${maximoVariables} variables.`
+        : `Selecciona entre ${MIN_VARIABLES} y ${MAX_VARIABLES} variables.`
     });
+  }
+
+  // 1.1 Nombres propios de las variables (módulo de transporte)
+  if (tieneNombresPropios) {
+    if (cantidadNumerica !== null && modelo.nombresVariables.length !== cantidadNumerica) {
+      errores.push({
+        campo: 'nombresVariables',
+        mensaje: `La lista de nombres debe tener ${cantidadNumerica} variables, una por cada coeficiente.`
+      });
+    } else {
+      modelo.nombresVariables.forEach((nombre, indice) => {
+        if (typeof nombre !== 'string' || !PATRON_NOMBRE_VARIABLE.test(nombre)) {
+          errores.push({
+            campo: `nombresVariables[${indice}]`,
+            mensaje: `El nombre "${nombre}" no es válido: usa letras, dígitos y guion bajo, empezando por una letra.`
+          });
+        }
+      });
+
+      const repetidos = modelo.nombresVariables.filter(
+        (nombre, indice) => modelo.nombresVariables.indexOf(nombre) !== indice
+      );
+
+      if (repetidos.length > 0) {
+        errores.push({
+          campo: 'nombresVariables',
+          mensaje: 'Hay nombres de variable repetidos: cada uno debe ser distinto.'
+        });
+      }
+    }
   }
 
   // 2. Tipo de optimización

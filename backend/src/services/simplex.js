@@ -1,4 +1,4 @@
-import { fraccion, suma, multiplica, esCero, aTexto, valor, DECIMALES_POR_DEFECTO } from '../utils/fraccion.js';
+import { fraccion, suma, multiplica, negada, esCero, esNegativo, aTexto, valor, DECIMALES_POR_DEFECTO } from '../utils/fraccion.js';
 import { construirFormaEstandar, textosModelo, textosFormaEstandar } from './formaEstandar.js';
 import { crearTablaInicial, serializarTabla } from './tabla.js';
 import { esOptimo, variableEntrante, calcularRazones, variableSaliente, pivotear } from './pivoteo.js';
@@ -244,6 +244,103 @@ function construirInterpretacion(modelo, forma, valores, z, verificacion) {
   return `${base}${cierre}`;
 }
 
+/**
+ * Coeficiente del objetivo (ya convertido a maximización) de una variable
+ * básica. Las variables agregadas (holguras, excedentes, artificiales) no
+ * tienen coeficiente en el objetivo.
+ *
+ * @param {object} forma
+ * @param {string} nombreBasica
+ * @returns {object} fracción
+ */
+function coeficienteObjetivo(forma, nombreBasica) {
+  const posicion = forma.variablesDecision.indexOf(nombreBasica);
+  return posicion >= 0 ? forma.coeficientesZ[posicion] : fraccion(0);
+}
+
+/**
+ * Precio sombra (dual) de cada restricción: cuánto cambia el valor del
+ * objetivo si el término independiente de esa restricción aumenta en una
+ * unidad, mientras el resto del problema no cambia.
+ *
+ * Se calcula con la base final: el dual de la restricción i es
+ *   y_i = Σ_r c_{B(r)} · (B⁻¹)_{ri}
+ * y (B⁻¹)_{ri} se lee directamente de la tabla final, en la columna de la
+ * variable agregada de esa restricción (holgura, exceso o artificial).
+ *
+ * @param {object} forma
+ * @param {object} tabla tableau final
+ * @param {boolean} esMinimizacion
+ * @returns {Array<{restriccion: number, signo: string, precio: object}>}
+ */
+function calcularPreciosSombra(forma, tabla, esMinimizacion) {
+  const precios = [];
+
+  forma.restricciones.forEach((restriccion, indice) => {
+    const numero = indice + 1;
+
+    // La columna canónica de la fila: holgura para ≤, exceso para ≥ y
+    // artificial para = (en los dos últimos casos la artificial también
+    // sirve, porque el signo se corrige con el factor).
+    const tipoColumna =
+      restriccion.signo === '<=' ? TIPOS_VARIABLE.HOLGURA : TIPOS_VARIABLE.EXCESO;
+
+    const agregada =
+      forma.variablesAgregadas.find(
+        (variable) => variable.restriccion === numero && variable.tipo === tipoColumna
+      ) ??
+      forma.variablesAgregadas.find(
+        (variable) => variable.restriccion === numero && variable.tipo === TIPOS_VARIABLE.ARTIFICIAL
+      );
+
+    if (!agregada) return;
+
+    const columna = tabla.columnas.indexOf(agregada.nombre);
+    // El exceso entra con signo negativo en la forma canónica.
+    const signo = agregada.tipo === TIPOS_VARIABLE.EXCESO ? -1 : 1;
+
+    let precio = fraccion(0);
+
+    tabla.filas.forEach((fila, indiceFila) => {
+      const coeficiente = coeficienteObjetivo(forma, tabla.basicas[indiceFila]);
+      precio = suma(precio, multiplica(multiplica(coeficiente, fraccion(signo)), fila[columna]));
+    });
+
+    // Al minimizar se maximizó −Z: el precio del problema original es el opuesto.
+    if (esMinimizacion) precio = negada(precio);
+
+    precios.push({ restriccion: numero, signo: restriccion.signo, precio });
+  });
+
+  return precios;
+}
+
+/** Texto en español que explica los precios sombra obtenidos. */
+function explicarPreciosSombra(precios) {
+  if (precios.length === 0) {
+    return 'No hay precios sombra para este modelo.';
+  }
+
+  const relevantes = precios.filter((precio) => !esCero(precio.precio));
+  const base =
+    'El precio sombra indica cuánto cambia Z si el término independiente de una restricción aumenta en una unidad (mientras el resto no cambia).';
+
+  if (relevantes.length === 0) {
+    return `${base} En este modelo todas las restricciones tienen precio sombra 0.`;
+  }
+
+  const ejemplos = relevantes
+    .slice(0, 2)
+    .map((precio) => {
+      const valor = aTexto(precio.precio);
+      const direccion = esNegativo(precio.precio) ? 'bajaría' : 'subiría';
+      const magnitud = aTexto(precio.precio.neg().abs());
+      return `en la restricción ${precio.restriccion} el precio es ${valor}: si su término independiente sube en 1, Z ${direccion} en ${magnitud}`;
+    });
+
+  return `${base} Por ejemplo, ${ejemplos.join('; ')}.`;
+}
+
 /** Arma el bloque de resultado con valores, holguras, verificación e interpretación. */
 function calcularResultado(modelo, forma, tabla, decimales) {
   const valores = valoresDeVariables(tabla);
@@ -294,6 +391,8 @@ function calcularResultado(modelo, forma, tabla, decimales) {
     };
   });
 
+  const precios = calcularPreciosSombra(forma, tabla, esMinimizacion);
+
   return {
     z: valor(z, decimales),
     variables,
@@ -301,7 +400,15 @@ function calcularResultado(modelo, forma, tabla, decimales) {
     excesos,
     artificiales,
     verificacion,
-    interpretacion: construirInterpretacion(modelo, forma, valores, z, verificacion)
+    interpretacion: construirInterpretacion(modelo, forma, valores, z, verificacion),
+    sensibilidad: {
+      preciosSombra: precios.map((precio) => ({
+        restriccion: precio.restriccion,
+        signo: precio.signo,
+        precio: valor(precio.precio, decimales)
+      })),
+      interpretacion: explicarPreciosSombra(precios)
+    }
   };
 }
 

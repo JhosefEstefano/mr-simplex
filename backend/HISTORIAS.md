@@ -114,13 +114,13 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 11 — Variables extendidas (módulo de transporte)
 
-- [ ] **VE-1** El modelo acepta `nombresVariables` propios (por ejemplo `x_11`, `x_12`).
-- [ ] **VE-2** El validador admite el modo extendido (hasta 60 variables) y mantiene 2–6 con `a`–`f` en el modo normal.
-- [ ] **VE-3** Los textos (objetivo, restricciones, no negatividad) usan los nombres propios.
-- [ ] **VE-4** Pruebas del modo extendido y del modo normal.
+- [x] **VE-1** El modelo acepta `nombresVariables` propios (por ejemplo `x_11`, `x_12`).
+- [x] **VE-2** El validador admite el modo extendido (hasta 60 variables) y mantiene 2–6 con `a`–`f` en el modo normal.
+- [x] **VE-3** Los textos (objetivo, restricciones, no negatividad) usan los nombres propios.
+- [x] **VE-4** Pruebas del modo extendido y del modo normal.
 
 ## Épica 12 — Sensibilidad (precios sombra)
 
-- [ ] **SE-1** Cálculo del precio sombra de cada restricción (signo correcto en `≤`, `≥` y con `MIN`).
-- [ ] **SE-2** Bloque `resultado.sensibilidad` con los precios y su interpretación en español.
-- [ ] **SE-3** Pruebas contra el caso de referencia y un caso calculado a mano.
+- [x] **SE-1** Cálculo del precio sombra de cada restricción (signo correcto en `≤`, `≥` y con `MIN`).
+- [x] **SE-2** Bloque `resultado.sensibilidad` con los precios y su interpretación en español.
+- [x] **SE-3** Pruebas contra el caso de referencia y un caso calculado a mano.

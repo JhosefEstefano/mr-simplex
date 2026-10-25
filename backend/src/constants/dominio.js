@@ -5,6 +5,15 @@ export const NOMBRES_VARIABLES = ['a', 'b', 'c', 'd', 'e', 'f'];
 export const MIN_VARIABLES = 2;
 export const MAX_VARIABLES = 6;
 
+/**
+ * Cantidad máxima de variables cuando el modelo trae sus propios nombres
+ * (por ejemplo, x_11, x_12… en el módulo de transporte).
+ */
+export const MAX_VARIABLES_EXTENDIDAS = 60;
+
+/** Nombres de variable admitidos: letra inicial y letras, dígitos o guion bajo. */
+export const PATRON_NOMBRE_VARIABLE = /^[A-Za-z][A-Za-z0-9_]{0,19}$/;
+
 /** Tipos de optimización admitidos. */
 export const OBJETIVOS = ['MAX', 'MIN'];
 
@@ -35,10 +44,19 @@ export const PREFIJOS = {
 
 /**
  * Nombres de las variables de decisión activas para un modelo.
+ *
+ * Si el modelo trae sus propios nombres (módulo de transporte), se usan
+ * esos; si no, se nombran de `a` a `f` como exige el curso.
+ *
  * @param {number} cantidad
+ * @param {string[]} [nombresPropios]
  * @returns {string[]}
  */
-export function nombresVariables(cantidad) {
+export function nombresVariables(cantidad, nombresPropios) {
+  if (Array.isArray(nombresPropios) && nombresPropios.length === cantidad) {
+    return [...nombresPropios];
+  }
+
   return NOMBRES_VARIABLES.slice(0, cantidad);
 }
 

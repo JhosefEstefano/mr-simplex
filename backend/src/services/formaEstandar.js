@@ -26,7 +26,7 @@ export const SIGNO_TEXTO = {
  * @returns {object} forma estándar
  */
 export function construirFormaEstandar(modelo) {
-  const variablesDecision = nombresVariables(modelo.numVariables);
+  const variablesDecision = nombresVariables(modelo.numVariables, modelo.nombresVariables);
   const esMinimizacion = modelo.objetivo === 'MIN';
 
   const coeficientesZOriginales = modelo.coeficientesZ.map((c) => fraccion(c));
@@ -141,7 +141,7 @@ export function construirFormaEstandar(modelo) {
  * @returns {{funcionObjetivo: string, restricciones: string[], noNegatividad: string}}
  */
 export function textosModelo(modelo) {
-  const variables = nombresVariables(modelo.numVariables);
+  const variables = nombresVariables(modelo.numVariables, modelo.nombresVariables);
 
   const terminosObjetivo = variables.map((nombre, indice) => ({
     coeficiente: fraccion(modelo.coeficientesZ[indice]),

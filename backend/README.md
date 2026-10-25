@@ -33,6 +33,7 @@ cp .env.example .env      # y ajusta MONGODB_URI si hace falta
 | `PORT` | `3000` | Puerto del servidor Express. |
 | `CORS_ORIGIN` | `http://localhost:5173` | Origen permitido por CORS (frontend de Vite). |
 | `MONGODB_URI` | `mongodb://127.0.0.1:27017/linear-studio` | Conexión a MongoDB. |
+| `JWT_SECRET` | *(clave de desarrollo)* | Clave para firmar los tokens de sesión. **Cámbiala en producción.** |
 
 ## 4. Scripts
 
@@ -152,15 +153,52 @@ El campo `campo` apunta al input con problema (`numVariables`, `objetivo`,
   "baseDeDatos": "conectada" }
 ```
 
+### Autenticación (`/api/auth`)
+
+| Método | Ruta | Qué hace |
+|---|---|---|
+| `POST` | `/api/auth/register` | Crea la cuenta y devuelve el token de sesión (201). |
+| `POST` | `/api/auth/login` | Inicia sesión y devuelve el token (200). |
+| `POST` | `/api/auth/forgot-password` | Genera un token de recuperación. |
+| `POST` | `/api/auth/reset-password` | Restablece la contraseña con ese token. |
+| `GET` | `/api/auth/yo` | Perfil del usuario de la sesión. |
+
+Las sesiones usan **JWT**: se envía en la cabecera `Authorization: Bearer <token>`.
+
+```bash
+# Registrarse
+curl -X POST http://localhost:3000/api/auth/register \
+  -H 'Content-Type: application/json' \
+  -d '{ "nombre": "Ana Ramírez", "email": "ana@umg.edu.gt", "password": "secreto123" }'
+
+# Guardar un modelo con la sesión iniciada
+curl -X POST http://localhost:3000/api/modelos \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <token>' \
+  -d '{ "nombre": "Mi modelo", "numVariables": 2, "objetivo": "MAX", ... }'
+```
+
+> **Recuperación de contraseña:** el proyecto no incluye servidor de correo, así
+> que `forgot-password` devuelve el token en la respuesta (modo demostración) y
+> `reset-password` lo consume. El token es de un solo uso y expira a los 30
+> minutos. En un entorno real, ese token se enviaría por correo en lugar de
+> devolverse en la respuesta.
+
 ### Modelos guardados
+
+Toda esta sección **exige una sesión iniciada** (`Authorization: Bearer <token>`).
 
 | Método | Ruta | Qué hace |
 |---|---|---|
 | `POST` | `/api/modelos` | Guarda el modelo **con su resolución embebida** (201). |
-| `GET` | `/api/modelos` | Lista los modelos guardados (sin las iteraciones, para que la lista no pese). |
+| `GET` | `/api/modelos` | Lista los modelos del usuario y los ejemplos públicos (sin las iteraciones, para que la lista no pese). |
 | `GET` | `/api/modelos/:id` | Devuelve el modelo con la resolución completa. |
 | `PUT` | `/api/modelos/:id` | Actualiza el modelo y lo vuelve a resolver. |
 | `DELETE` | `/api/modelos/:id` | Elimina el modelo. |
+
+Cada modelo guarda su `usuarioId`: solo el dueño puede modificarlo o borrarlo
+(403 en caso contrario). Los modelos sin dueño (`usuarioId: null`) son ejemplos
+públicos —los que carga el seed— y se muestran a todos en la lista.
 
 Un modelo guardado tiene esta forma:
 
@@ -195,6 +233,8 @@ proyecto sea sólida:
 | **Restricciones `≥` y `=`** | Se usa el **método de dos fases**: la Fase 1 minimiza `W = Σ artificiales`; si al terminar `W > 0` el problema es **infactible**; si `W = 0` se pasa a la Fase 2 con el objetivo original. Las artificiales ya no pueden entrar en la Fase 2. |
 | **Anti-ciclos** | A partir de la iteración 50 se aplica la **regla de Bland** (primera columna con costo reducido negativo), que garantiza la terminación. Además hay un tope de 100 iteraciones. |
 | **Precisión** | Todos los cálculos son exactos; el decimal se redondea (medio punto hacia afuera del cero) solo para mostrarlo. |
+| **Precio sombra** | `resultado.sensibilidad` trae el dual de cada restricción: cuánto cambia Z si su término independiente sube en una unidad. Se calcula con la base final (`y_i = Σ_r c_{B(r)}·(B⁻¹)_{ri}`) y lleva su propia interpretación en español. |
+| **Variables con nombre propio** | El modelo admite un campo opcional `nombresVariables` (por ejemplo `["x_11", "x_12"]`) para el módulo de transporte. En ese modo se admiten hasta 60 variables; sin ese campo se mantiene el requisito del curso: **de 2 a 6 variables** nombradas `a`–`f`. |
 
 ## 7. Pruebas
 
