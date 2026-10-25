@@ -78,8 +78,21 @@ export default function PantallaSesion({ onSesionIniciada, mensaje }) {
   const Icono = vista === 'ingreso' ? LogIn : vista === 'registro' ? UserPlus : KeyRound;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10">
-      <div className="w-full max-w-[400px]">
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 py-10">
+      {/* Fondo decorativo: manchas difusas y retícula de puntos. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1.5' cy='1.5' r='1.5' fill='%2394A3B8'/%3E%3C/svg%3E\")"
+          }}
+        />
+        <div className="absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -right-20 top-1/3 h-[360px] w-[360px] rounded-full bg-[#0891B2]/10 blur-3xl" />
+      </div>
+
+      <div className="relative w-full max-w-[400px]">
         <div className="mb-6 flex flex-col items-center gap-2.5 text-center">
           <span className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-primary text-primary-foreground">
             <BarChart3 size={22} aria-hidden="true" />
