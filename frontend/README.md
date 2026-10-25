@@ -43,6 +43,9 @@ cp .env.example .env      # y ajusta VITE_API_URL si el backend está en otro la
 
 ## 5. Las cuatro pantallas
 
+Antes de las cuatro pantallas está la **pantalla de acceso**: hay que iniciar sesión o crear una
+cuenta para entrar. Con la sesión activa, el flujo de trabajo es:
+
 1. **Ingreso de datos** — Se elige el número de variables (2 a 6), el tipo de optimización, los
    coeficientes de `Z` y las restricciones. La vista previa se actualiza mientras se escribe y los
    errores se muestran junto al formulario. El botón **Preparar modelo** llama a `POST /api/resolver`.
@@ -57,11 +60,15 @@ cp .env.example .env      # y ajusta VITE_API_URL si el backend está en otro la
 
 ## 6. Sesión y persistencia
 
+- **Pantalla de acceso**: es la primera vista de la aplicación. Permite iniciar sesión, crear
+  cuenta o restablecer la contraseña; sin sesión no se entra a la app.
+- **Sesión persistente**: el token y el perfil se guardan en `localStorage`, así que al recargar
+  la página se entra directo y el nombre del usuario sigue en el pie del sidebar. Al arrancar, el
+  token se valida contra `GET /api/auth/yo`: si ya no es válido, la sesión se cierra.
 - **Modelos guardados** (barra superior): lista los modelos del usuario y permite abrirlos sin
   recalcular, porque el backend guarda la resolución completa.
-- **Guardar**: persiste el modelo con su resolución. Requiere iniciar sesión.
-- **Sesión**: iniciar sesión, crear cuenta o restablecer la contraseña. El token se guarda en
-  `localStorage`.
+- **Guardar**: persiste el modelo con su resolución. La barra superior muestra el estado real:
+  `Guardando…` durante la petición y `Guardado` al terminar.
 
 > El proyecto no incluye servidor de correo: la recuperación muestra el token en pantalla
 > (modo demostración), igual que en el backend.
@@ -102,7 +109,7 @@ Inter. Los iconos son de **Lucide**, nunca emojis.
 ```
 frontend/
   src/
-    App.jsx                     # montaje de las cuatro pantallas
+    App.jsx                     # puerta de sesión + montaje de las cuatro pantallas
     main.jsx
     index.css                   # Tailwind + tokens
     styles/tokens.css           # tokens del sistema de diseño
@@ -118,7 +125,7 @@ frontend/
       ui/                       # Button, Input, Card, Badge, Alert, SelectorObjetivo
       TablaSimplex.jsx          # tabla con resaltado del pivote
       ModelosGuardados.jsx      # panel de persistencia
-      PanelSesion.jsx           # login, registro y recuperación
+      PantallaSesion.jsx        # login, registro y recuperación (primera pantalla)
       EditorTransporte.jsx      # módulo de transporte
     estado/SimplexContexto.jsx  # estado global con reducer
     services/api.js             # llamadas al backend

@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Calculator, Goal, Table2, Truck } from 'lucide-react';
+import { BarChart3, BookOpen, Calculator, Goal, Loader2, Table2, Truck } from 'lucide-react';
 import { cn } from '../utils/cn.js';
 
 /** Los cuatro pasos del flujo, con su icono y su etiqueta. */
@@ -68,6 +68,7 @@ export function Sidebar({
   habilitado,
   ejercicio,
   usuario,
+  validandoSesion = false,
   onSalir,
   onAbrirTransporte
 }) {
@@ -165,7 +166,12 @@ export function Sidebar({
         </p>
         {usuario ? (
           <div className="mt-2 flex items-center justify-between gap-2">
-            <span className="truncate text-[11px] text-muted-foreground">{usuario.email}</span>
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate text-[12px] font-semibold text-foreground">
+                {usuario.nombre || usuario.email}
+              </span>
+              <span className="truncate text-[11px] text-muted-foreground">{usuario.email}</span>
+            </span>
             <button
               type="button"
               onClick={onSalir}
@@ -174,6 +180,11 @@ export function Sidebar({
               Salir
             </button>
           </div>
+        ) : validandoSesion ? (
+          <p className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+            Restaurando sesión…
+          </p>
         ) : null}
       </div>
     </aside>

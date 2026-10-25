@@ -107,8 +107,41 @@ const capturarPanel = async (nombre) => {
 
 try {
   /* ---------------------------------------------------------------- */
-  console.log('\n▶ Paso 1 · Ingreso de datos');
+  console.log('\n▶ Sesión · la pantalla de acceso es la primera');
   await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
+  await pagina.waitForSelector('h1:has-text("Iniciar sesión")');
+
+  verificar(
+    'La aplicación abre en la pantalla de acceso',
+    await pagina.isVisible('text=Linear Studio')
+  );
+  verificar(
+    'La pantalla de acceso ofrece crear cuenta',
+    await pagina.isVisible('text=Crear cuenta')
+  );
+  await capturar('00-sesion-inicio.png');
+
+  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
+  await pagina.waitForTimeout(300);
+  await capturarPanel('25-richard-crear-cuenta.png');
+
+  const correo = `equipo${Date.now()}@umg.edu.gt`;
+  await pagina.getByLabel('Nombre').fill('Equipo Linear Studio');
+  await pagina.getByLabel('Correo').fill(correo);
+  await pagina.getByLabel('Contraseña').fill('simplex2026');
+  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
+
+  await pagina.waitForSelector('h1:has-text("Ingreso de datos")', { timeout: 20000 });
+  await pagina.waitForTimeout(400);
+  verificar('La cuenta se crea y queda la sesión iniciada', await pagina.isVisible('text=Guardar'));
+  verificar(
+    'El sidebar muestra el nombre de la sesión',
+    await pagina.isVisible('text=Equipo Linear Studio')
+  );
+  await capturarPanel('11-sesion.png');
+
+  /* ---------------------------------------------------------------- */
+  console.log('\n▶ Paso 1 · Ingreso de datos');
   await pagina.waitForSelector('h1');
 
   verificar('La aplicación carga', await pagina.isVisible('text=Linear Studio'));
@@ -305,33 +338,7 @@ try {
   await capturar('24-jonnathan-precios-sombra.png');
 
   /* ---------------------------------------------------------------- */
-  console.log('\n▶ Sesión');
-  await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
-  await pagina.getByRole('button', { name: /Modelos guardados/i }).click();
-  await pagina.waitForSelector('text=/Inicia sesión para ver tus modelos guardados/i');
-  await pagina.waitForTimeout(300);
-  await capturarPanel('11-sesion.png');
-
-
-  /* ---------------------------------------------------------------- */
   console.log('\n▶ Cuenta y persistencia (Jonnathan y Richard)');
-
-  await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
-  await pagina.getByRole('button', { name: /Modelos guardados/i }).click();
-  await pagina.waitForSelector('text=/Inicia sesión para ver tus modelos guardados/i');
-  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
-  await pagina.waitForTimeout(300);
-  await capturarPanel('25-richard-crear-cuenta.png');
-
-  const correo = `equipo${Date.now()}@umg.edu.gt`;
-  await pagina.getByLabel('Nombre').fill('Equipo Linear Studio');
-  await pagina.getByLabel('Correo').fill(correo);
-  await pagina.getByLabel('Contraseña').fill('simplex2026');
-  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
-
-  await pagina.waitForSelector('text=/Modelos guardados/i', { timeout: 20000 });
-  await pagina.waitForTimeout(500);
-  verificar('La cuenta se crea y queda la sesión iniciada', await pagina.isVisible('text=Guardar'));
 
   // Se prepara y guarda un modelo para que aparezca en el historial.
   await pagina.getByRole('button', { name: /^Ingreso de datos/ }).click();
@@ -346,7 +353,12 @@ try {
     ]
   });
   await pagina.getByRole('button', { name: /^Guardar$/ }).click();
-  await pagina.waitForTimeout(1200);
+  await pagina.waitForSelector('text=/Guardado/i', { timeout: 20000 });
+  await pagina.waitForTimeout(500);
+  verificar(
+    'El modelo se guarda y la barra lo indica',
+    await pagina.isVisible('text=/Guardado/i')
+  );
 
   await pagina.getByRole('button', { name: /Modelos guardados/i }).click();
   await pagina.waitForSelector('text=/Ejemplo|Modelo/', { timeout: 20000 });

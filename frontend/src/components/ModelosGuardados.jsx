@@ -17,6 +17,8 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
 
   const [modelos, setModelos] = useState([]);
   const [cargando, setCargando] = useState(false);
+  const [cargandoId, setCargandoId] = useState(null);
+  const [eliminandoId, setEliminandoId] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -32,7 +34,14 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
         if (vigente) setModelos(datos.modelos ?? []);
       })
       .catch((fallo) => {
-        if (vigente) setError(fallo.message);
+        if (!vigente) return;
+
+        if (fallo.estado === 'NO_AUTENTICADO') {
+          dispatch({ tipo: 'sesionExpirada' });
+          return;
+        }
+
+        setError(fallo.message);
       })
       .finally(() => {
         if (vigente) setCargando(false);
@@ -41,9 +50,14 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
     return () => {
       vigente = false;
     };
-  }, [abierto, token]);
+  }, [abierto, token, dispatch]);
 
   const abrir = async (id) => {
+    if (cargandoId) return;
+
+    setCargandoId(id);
+    setError(null);
+
     try {
       const guardado = await obtenerModelo(id, token);
 
@@ -65,16 +79,37 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
       dispatch({ tipo: 'modeloGuardado', id, aviso: `Modelo "${guardado.nombre}" cargado.` });
       onCerrar();
     } catch (fallo) {
+      if (fallo.estado === 'NO_AUTENTICADO') {
+        dispatch({ tipo: 'sesionExpirada' });
+        onCerrar();
+        return;
+      }
+
       setError(fallo.message);
+    } finally {
+      setCargandoId(null);
     }
   };
 
   const borrar = async (id) => {
+    if (eliminandoId) return;
+
+    setEliminandoId(id);
+    setError(null);
+
     try {
       await eliminarModelo(id, token);
       setModelos((lista) => lista.filter((modelo) => modelo._id !== id));
     } catch (fallo) {
+      if (fallo.estado === 'NO_AUTENTICADO') {
+        dispatch({ tipo: 'sesionExpirada' });
+        onCerrar();
+        return;
+      }
+
       setError(fallo.message);
+    } finally {
+      setEliminandoId(null);
     }
   };
 
@@ -85,14 +120,22 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
       <div className="flex h-full w-[380px] max-w-full flex-col border-l border-border bg-card shadow-xl">
         <header className="flex items-center justify-between border-b border-border px-5 py-4">
           <h2 className="text-[15px] font-semibold text-foreground">Modelos guardados</h2>
-          <button
-            type="button"
-            onClick={onCerrar}
-            aria-label="Cerrar el panel"
-            className="rounded-[8px] p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <X size={16} aria-hidden="true" />
-          </button>
+          <div className="flex items-center gap-3">
+            {cargandoId ? (
+              <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                <Loader2 size={13} className="animate-spin" aria-hidden="true" />
+                Cargando modelo…
+              </span>
+            ) : null}
+            <button
+              type="button"
+              onClick={onCerrar}
+              aria-label="Cerrar el panel"
+              className="rounded-[8px] p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
@@ -129,17 +172,30 @@ export default function ModelosGuardados({ abierto, onCerrar }) {
                     {modelo.usuarioId === null ? ' · ejemplo' : ''}
                   </p>
                   <div className="mt-2.5 flex items-center gap-2">
-                    <Button tamano="sm" onClick={() => abrir(modelo._id)}>
-                      Abrir
+                    <Button
+                      tamano="sm"
+                      onClick={() => abrir(modelo._id)}
+                      disabled={Boolean(cargandoId)}
+                      aria-label={`Abrir ${modelo.nombre}`}
+                    >
+                      {cargandoId === modelo._id ? (
+                        <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                      ) : null}
+                      {cargandoId === modelo._id ? 'Abriendo…' : 'Abrir'}
                     </Button>
                     {modelo.usuarioId ? (
                       <Button
                         variante="secundario"
                         tamano="sm"
                         onClick={() => borrar(modelo._id)}
+                        disabled={Boolean(eliminandoId)}
                         aria-label={`Eliminar ${modelo.nombre}`}
                       >
-                        <Trash2 size={14} aria-hidden="true" />
+                        {eliminandoId === modelo._id ? (
+                          <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                        ) : (
+                          <Trash2 size={14} aria-hidden="true" />
+                        )}
                       </Button>
                     ) : null}
                   </div>

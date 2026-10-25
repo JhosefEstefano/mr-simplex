@@ -116,6 +116,12 @@ const RESPUESTA = {
 describe('recorrido completo — los cuatro pasos', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+
+    // La aplicación exige sesión: se deja una cuenta iniciada.
+    const usuario = { id: 'u1', nombre: 'Ana Pérez', email: 'ana@correo.com' };
+    window.localStorage.setItem('linear-studio-token', 'token-1');
+    window.localStorage.setItem('linear-studio-usuario', JSON.stringify(usuario));
+    vi.spyOn(api, 'perfil').mockResolvedValue({ estado: 'OK', usuario });
   });
 
   it('va del ingreso al resultado final', async () => {

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { ProveedorSimplex, useSimplex } from './estado/SimplexContexto.jsx';
-import { Sidebar } from './layout/Sidebar.jsx';
+import StepIndicator, { Sidebar } from './layout/Sidebar.jsx';
 import Topbar from './layout/Topbar.jsx';
-import StepIndicator from './layout/Sidebar.jsx';
 import PasoIngreso from './steps/PasoIngreso.jsx';
 import PasoModelo from './steps/PasoModelo.jsx';
 import PasoPivoteo from './steps/PasoPivoteo.jsx';
 import PasoResultado from './steps/PasoResultado.jsx';
 import ModelosGuardados from './components/ModelosGuardados.jsx';
-import PanelSesion from './components/PanelSesion.jsx';
+import PantallaSesion from './components/PantallaSesion.jsx';
 import EditorTransporte from './components/EditorTransporte.jsx';
 import { Alert } from './components/ui/Alert.jsx';
 import { guardarModelo } from './services/api.js';
@@ -41,9 +40,8 @@ function Aplicacion() {
   const { paso, respuesta, token, usuario, modeloGuardadoId, aviso } = estado;
 
   const [panelModelos, setPanelModelos] = useState(false);
-  const [panelSesion, setPanelSesion] = useState(false);
   const [panelTransporte, setPanelTransporte] = useState(false);
-  const [avisoSesion, setAvisoSesion] = useState(null);
+  const [guardando, setGuardando] = useState(false);
 
   const habilitado = (numero) => {
     if (numero === 1) return true;
@@ -55,13 +53,9 @@ function Aplicacion() {
   };
 
   const guardar = async () => {
-    if (!respuesta) return;
+    if (!respuesta || guardando) return;
 
-    if (!token) {
-      setAvisoSesion('Inicia sesión para guardar tus modelos.');
-      setPanelSesion(true);
-      return;
-    }
+    setGuardando(true);
 
     const modelo = {
       nombre: respuesta.modelo.objetivo === 'MAX' ? 'Modelo maximización' : 'Modelo minimización',
@@ -92,10 +86,17 @@ function Aplicacion() {
         aviso: `Modelo guardado como "${modelo.nombre}".`
       });
     } catch (error) {
+      if (error.estado === 'NO_AUTENTICADO') {
+        dispatch({ tipo: 'sesionExpirada' });
+        return;
+      }
+
       dispatch({
         tipo: 'aviso',
         aviso: error.errores?.[0]?.mensaje ?? error.message
       });
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -127,6 +128,23 @@ function Aplicacion() {
 
   const encabezado = ENCABEZADOS[paso];
 
+  // Sin sesión no se entra a la aplicación: la pantalla de acceso es la primera.
+  if (!token) {
+    return (
+      <PantallaSesion
+        mensaje={aviso}
+        onSesionIniciada={(respuestaSesion) => {
+          dispatch({ tipo: 'aviso', aviso: null });
+          dispatch({
+            tipo: 'sesion',
+            token: respuestaSesion.token,
+            usuario: respuestaSesion.usuario
+          });
+        }}
+      />
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar
@@ -135,6 +153,7 @@ function Aplicacion() {
         habilitado={habilitado}
         ejercicio={ejercicio}
         usuario={usuario}
+        validandoSesion={estado.validandoSesion}
         onSalir={() => dispatch({ tipo: 'salirSesion' })}
         onAbrirTransporte={() => setPanelTransporte(true)}
       />
@@ -142,16 +161,10 @@ function Aplicacion() {
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar
           pasoActual={paso}
-          estadoGuardado={modeloGuardadoId ? 'guardado' : 'sin guardar'}
+          estadoGuardado={guardando ? 'guardando' : modeloGuardadoId ? 'guardado' : 'sin guardar'}
+          guardando={guardando}
           onGuardar={guardar}
-          onAbrirModelos={() => {
-            if (!token) {
-              setAvisoSesion('Inicia sesión para ver tus modelos guardados.');
-              setPanelSesion(true);
-              return;
-            }
-            setPanelModelos(true);
-          }}
+          onAbrirModelos={() => setPanelModelos(true)}
           onReiniciar={reiniciar}
           puedeGuardar={Boolean(respuesta)}
         />
@@ -173,11 +186,6 @@ function Aplicacion() {
             {aviso ? (
               <Alert variante="info" className="mb-1">
                 {aviso}
-              </Alert>
-            ) : null}
-            {avisoSesion ? (
-              <Alert variante="advertencia" className="mb-1">
-                {avisoSesion}
               </Alert>
             ) : null}
 
@@ -211,20 +219,6 @@ function Aplicacion() {
           });
           setPanelTransporte(false);
           dispatch({ tipo: 'irA', paso: 3 });
-        }}
-      />
-
-      <PanelSesion
-        abierto={panelSesion}
-        mensaje={avisoSesion}
-        onCerrar={() => {
-          setPanelSesion(false);
-          setAvisoSesion(null);
-        }}
-        onSesionIniciada={(respuestaSesion) => {
-          dispatch({ tipo: 'sesion', token: respuestaSesion.token, usuario: respuestaSesion.usuario });
-          setPanelSesion(false);
-          setAvisoSesion(null);
         }}
       />
     </div>

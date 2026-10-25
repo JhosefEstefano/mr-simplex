@@ -389,6 +389,12 @@
         elemento pivote, la prueba de razones y las operaciones de fila.
       </p>
 
+      <p>
+        Al abrir la aplicación aparece la <strong>pantalla de acceso</strong>: hay que iniciar
+        sesión o crear una cuenta para entrar. La sesión se conserva al recargar la página y el
+        nombre del usuario aparece siempre en el pie de la barra lateral.
+      </p>
+
       <h3>El recorrido en cuatro pasos</h3>
       <table>
         <thead>
@@ -516,9 +522,9 @@ npm run dev               # http://localhost:5173</code></pre>
       <h2>Paso 1 · Ingreso de datos</h2>
 
       <p>
-        Es la pantalla inicial. A la izquierda está el formulario y a la derecha la
-        <strong>vista previa</strong>, que se actualiza con cada tecla: sirve para comprobar que
-        el modelo es el que quieres antes de resolverlo.
+        Es la primera pantalla de trabajo, después de iniciar sesión. A la izquierda está el
+        formulario y a la derecha la <strong>vista previa</strong>, que se actualiza con cada
+        tecla: sirve para comprobar que el modelo es el que quieres antes de resolverlo.
       </p>
 
       <figure>
@@ -774,25 +780,36 @@ npm run dev               # http://localhost:5173</code></pre>
       <h2>Sesión y modelos guardados</h2>
 
       <p>
-        Para guardar modelos hace falta una cuenta. La barra superior lleva el botón
-        <strong>Modelos guardados</strong> y el estado <em>Guardado</em> / <em>Sin guardar</em>.
+        La aplicación empieza con la <strong>pantalla de acceso</strong>. Desde ahí se inicia
+        sesión o se crea una cuenta; la sesión queda guardada en el navegador, así que al
+        recargar la página se entra directo y el nombre del usuario sigue visible en el pie de
+        la barra lateral.
       </p>
 
       <figure>
-        <img src="capturas/11-sesion.png" alt="Panel de inicio de sesión" />
+        <img src="capturas/00-sesion-inicio.png" alt="Pantalla de acceso de Linear Studio" />
         <figcaption>
-          Figura 8. El panel de sesión: iniciar sesión, crear cuenta o restablecer la contraseña.
+          Figura 8. La pantalla de acceso es la primera vista de la aplicación: iniciar sesión,
+          crear cuenta o restablecer la contraseña.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="capturas/11-sesion.png" alt="Sesión iniciada con el nombre en el sidebar" />
+        <figcaption>
+          Figura 9. Con la sesión iniciada, el pie de la barra lateral muestra el nombre y el
+          correo del usuario, junto al botón <em>Salir</em>.
         </figcaption>
       </figure>
 
       <h3>El flujo</h3>
       <ol>
-        <li>Pulsa <strong>Modelos guardados</strong> o <strong>Guardar</strong> en la barra superior.</li>
-        <li>Crea una cuenta con nombre, correo y contraseña (mínimo 6 caracteres).</li>
-        <li>Al guardar, el modelo se almacena <strong>con su resolución completa</strong>.</li>
+        <li>En la pantalla de acceso, crea una cuenta con nombre, correo y contraseña (mínimo 6 caracteres).</li>
+        <li>Al guardar un modelo, el estado de la barra superior pasa a <em>Guardando…</em> y luego a <em>Guardado</em>.</li>
+        <li>El modelo se almacena <strong>con su resolución completa</strong>.</li>
         <li>
-          Desde el panel puedes abrir un modelo guardado: se recupera el procedimiento entero
-          <strong>sin volver a calcular</strong>.
+          Desde <strong>Modelos guardados</strong> puedes abrir un modelo: se recupera el
+          procedimiento entero <strong>sin volver a calcular</strong>.
         </li>
       </ol>
 
@@ -821,7 +838,7 @@ npm run dev               # http://localhost:5173</code></pre>
       <figure>
         <img src="capturas/08-transporte-editor.png" alt="Editor del problema de transporte" />
         <figcaption>
-          Figura 9. El editor de la matriz de costos con las ofertas y las demandas.
+          Figura 10. El editor de la matriz de costos con las ofertas y las demandas.
         </figcaption>
       </figure>
 
@@ -836,7 +853,7 @@ npm run dev               # http://localhost:5173</code></pre>
       <figure>
         <img src="capturas/09-transporte-plan.png" alt="Plan de envío del problema de transporte" />
         <figcaption>
-          Figura 10. El plan de envío: las rutas con carga resaltadas y el costo total.
+          Figura 11. El plan de envío: las rutas con carga resaltadas y el costo total.
         </figcaption>
       </figure>
 
@@ -854,7 +871,7 @@ npm run dev               # http://localhost:5173</code></pre>
       <figure>
         <img src="capturas/10-transporte-procedimiento.png" alt="Procedimiento simplex del transporte" />
         <figcaption>
-          Figura 11. El botón «Ver el procedimiento simplex» abre el pivoteo del modelo compilado,
+          Figura 12. El botón «Ver el procedimiento simplex» abre el pivoteo del modelo compilado,
           con su Fase 1 y su Fase 2.
         </figcaption>
       </figure>

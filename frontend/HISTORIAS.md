@@ -98,3 +98,13 @@ Convención: `FE-<épica>.<n>`.
 - [x] **FE-10.5** Anexo de equivalencias con Python (Flask/SQLite) para la defensa.
 - [x] **FE-10.6** Declaración del uso de herramientas de IA.
 - [x] **FE-10.7** PDF del manual del equipo.
+
+## Épica 11 — Acceso, sesión y avisos de carga
+
+- [x] **FE-11.1** Pantalla de acceso a pantalla completa como primera vista: iniciar sesión, crear cuenta o restablecer la contraseña. Sin sesión no se monta la aplicación.
+- [x] **FE-11.2** Sesión persistente: token y perfil en `localStorage`, con el nombre y el correo en el pie del sidebar.
+- [x] **FE-11.3** Validación del token al arrancar contra `GET /api/auth/yo`: si no es válido, la sesión se cierra; si el servidor no responde, la sesión se mantiene.
+- [x] **FE-11.4** Avisos de carga al guardar: el botón y el estado de la barra superior muestran `Guardando…` durante la petición.
+- [x] **FE-11.5** Avisos de carga en el panel de modelos guardados: al listar, al abrir y al eliminar.
+- [x] **FE-11.6** Corrección del panel de sesión: se importaba `restablecerPassword` sin declararlo y faltaba el título de esa vista.
+- [x] **FE-11.7** Pruebas de sesión y de persistencia, y recorrido real con la pantalla de acceso.
