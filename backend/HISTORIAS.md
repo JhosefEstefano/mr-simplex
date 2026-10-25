@@ -94,6 +94,6 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 9 — Cierre
 
-- [ ] **BE-9.1** Coverage ≥ 85 % en `src/services` y `src/controllers`.
-- [ ] **BE-9.2** README del backend (instalación, scripts, endpoints, ejemplo).
-- [ ] **BE-9.3** Suite de extremo a extremo: resolver → guardar → listar → recargar → eliminar.
+- [x] **BE-9.1** Coverage ≥ 85 % en `src/services` y `src/controllers`.
+- [x] **BE-9.2** README del backend (instalación, scripts, endpoints, ejemplo).
+- [x] **BE-9.3** Suite de extremo a extremo: resolver → guardar → listar → recargar → eliminar.
