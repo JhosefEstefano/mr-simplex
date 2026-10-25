@@ -44,11 +44,11 @@ Convención: `BE-<épica>.<n>`.
 - [ ] **BE-3.5** Sin razón positiva → `NO_ACOTADO` con mensaje explicativo.
 - [ ] **BE-3.6** Normalización de la fila pivote y registro de la operación.
 - [ ] **BE-3.7** Eliminación de la columna pivote (incluida la fila Z) con operaciones registradas.
-- [ ] **BE-3.8** Iteración completa: `numero`, `fase`, `tablaAntes`, `entrante`, `razones`, `saliente`, `pivote`, `operaciones`, `tablaDespues`, `explicacion`.
-- [ ] **BE-3.9** Iteración 0 = tabla inicial, para poder navegar desde el comienzo.
-- [ ] **BE-3.10** Resultado final: variables, Z, holguras/excesos/artificiales y `tableauFinal`.
-- [ ] **BE-3.11** Verificación por restricción (lado izquierdo, holgura, `activa`) e `interpretacion`.
-- [ ] **BE-3.12** Caso de referencia: `MAX Z = 3a + 5b` → a = 2, b = 6, Z = 36, s₁ = 2 en 2 iteraciones.
+- [x] **BE-3.8** Iteración completa: `numero`, `fase`, `tablaAntes`, `entrante`, `razones`, `saliente`, `pivote`, `operaciones`, `tablaDespues`, `explicacion`.
+- [x] **BE-3.9** Iteración 0 = tabla inicial, para poder navegar desde el comienzo.
+- [x] **BE-3.10** Resultado final: variables, Z, holguras/excesos/artificiales y `tableauFinal`.
+- [x] **BE-3.11** Verificación por restricción (lado izquierdo, holgura, `activa`) e `interpretacion`.
+- [x] **BE-3.12** Caso de referencia: `MAX Z = 3a + 5b` → a = 2, b = 6, Z = 36, s₁ = 2 en 2 iteraciones.
 
 ## Épica 4 — Minimización
 
