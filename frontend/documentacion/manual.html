@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Linear Studio — Manual de usuario</title>
+    <style>
+      :root {
+        --background: #f8fafc;
+        --foreground: #0f172a;
+        --card: #ffffff;
+        --muted: #f1f5f9;
+        --muted-foreground: #64748b;
+        --border: #e2e8f0;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-soft: #eff6ff;
+        --success: #15803d;
+        --warning: #b45309;
+        --destructive: #dc2626;
+        --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+      }
+
+      @page {
+        size: A4;
+        margin: 18mm 16mm 16mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        font-size: 10.5pt;
+        line-height: 1.55;
+      }
+
+      /* ---------- Portada ---------- */
+      .portada {
+        page-break-after: always;
+        height: 247mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-top: 6px solid var(--primary);
+      }
+
+      .marca {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 26px;
+      }
+
+      .marca-icono {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .marca-nombre {
+        font-size: 19pt;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      .marca-sub {
+        font-size: 9pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--muted-foreground);
+        text-transform: uppercase;
+      }
+
+      h1 {
+        font-size: 30pt;
+        line-height: 1.15;
+        margin: 0 0 10px;
+        letter-spacing: -0.02em;
+      }
+
+      .portada .bajada {
+        font-size: 13pt;
+        color: var(--muted-foreground);
+        margin: 0 0 30px;
+        max-width: 130mm;
+      }
+
+      .portada-datos {
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+        font-size: 10pt;
+        color: var(--muted-foreground);
+      }
+
+      .portada-datos strong {
+        color: var(--foreground);
+      }
+
+      /* ---------- Estructura ---------- */
+      h2 {
+        font-size: 17pt;
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+        page-break-after: avoid;
+      }
+
+      h3 {
+        font-size: 12.5pt;
+        margin: 18px 0 6px;
+        page-break-after: avoid;
+      }
+
+      h4 {
+        font-size: 11pt;
+        margin: 14px 0 4px;
+        color: var(--foreground);
+        page-break-after: avoid;
+      }
+
+      p {
+        margin: 0 0 9px;
+      }
+
+      ul,
+      ol {
+        margin: 0 0 10px;
+        padding-left: 18px;
+      }
+
+      li {
+        margin-bottom: 3px;
+      }
+
+      .seccion {
+        page-break-before: always;
+      }
+
+      .seccion:first-of-type {
+        page-break-before: auto;
+      }
+
+      .eyebrow {
+        font-size: 8.5pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 2px;
+      }
+
+      .mono {
+        font-family: var(--font-mono);
+      }
+
+      code {
+        font-family: var(--font-mono);
+        font-size: 9.5pt;
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+      }
+
+      pre {
+        font-family: var(--font-mono);
+        font-size: 9pt;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 10px 12px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 0 0 12px;
+        line-height: 1.5;
+      }
+
+      pre code {
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 0;
+        font-size: 9pt;
+      }
+
+      /* ---------- Tablas ---------- */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 14px;
+        font-size: 9.5pt;
+      }
+
+      th {
+        background: var(--background);
+        color: var(--muted-foreground);
+        font-size: 8.5pt;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+      }
+
+      /* ---------- Figuras ---------- */
+      figure {
+        margin: 0 0 16px;
+        page-break-inside: avoid;
+      }
+
+      figure img {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: block;
+      }
+
+      figcaption {
+        font-size: 9pt;
+        color: var(--muted-foreground);
+        margin-top: 6px;
+        padding-left: 10px;
+        border-left: 2px solid var(--primary);
+      }
+
+      /* ---------- Avisos ---------- */
+      .aviso {
+        display: flex;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin: 0 0 14px;
+        font-size: 10pt;
+        page-break-inside: avoid;
+      }
+
+      .aviso .icono {
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .aviso.info {
+        background: #eff6ff;
+        border-color: #dbeafe;
+      }
+      .aviso.info .icono {
+        color: var(--primary);
+      }
+      .aviso.exito {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+      }
+      .aviso.exito .icono {
+        color: var(--success);
+      }
+      .aviso.aviso {
+        background: #fffbeb;
+        border-color: #fde68a;
+      }
+      .aviso.aviso .icono {
+        color: var(--warning);
+      }
+
+      .aviso strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      /* ---------- Índice ---------- */
+      .indice {
+        background: var(--background);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-bottom: 18px;
+      }
+
+      .indice ol {
+        margin: 0;
+        padding-left: 18px;
+        columns: 2;
+        column-gap: 24px;
+      }
+
+      .indice li {
+        break-inside: avoid;
+      }
+
+      .pie {
+        margin-top: 22px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        font-size: 8.5pt;
+        color: var(--muted-foreground);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===================== PORTADA ===================== -->
+    <section class="portada">
+      <div class="marca">
+        <div class="marca-icono">LS</div>
+        <div>
+          <div class="marca-nombre">Linear Studio</div>
+          <div class="marca-sub">Optimización · LP</div>
+        </div>
+      </div>
+
+      <h1>Manual de usuario</h1>
+      <p class="bajada">
+        Sistema web del método simplex para programación lineal: ingreso del modelo, forma
+        estándar, procedimiento iteración por iteración y lectura de la solución óptima.
+      </p>
+
+      <div class="portada-datos">
+        <p style="margin: 0 0 4px">
+          <strong>Curso:</strong> Investigación de Operaciones — Universidad Mariano Gálvez de
+          Guatemala
+        </p>
+        <p style="margin: 0 0 4px">
+          <strong>Autores:</strong> Equipo Linear Studio
+        </p>
+        <p style="margin: 0"><strong>Versión:</strong> 1.0 · Octubre de 2026</p>
+      </div>
+    </section>
+
+    <!-- ===================== ÍNDICE ===================== -->
+    <section>
+      <div class="eyebrow">Contenido</div>
+      <h2>Índice</h2>
+
+      <div class="indice">
+        <ol>
+          <li>Qué es Linear Studio</li>
+          <li>Instalación y puesta en marcha</li>
+          <li>Paso 1 · Ingreso de datos</li>
+          <li>Paso 2 · Modelo y tabla inicial</li>
+          <li>Paso 3 · Pivoteo</li>
+          <li>Paso 4 · Resultado final</li>
+          <li>Sesión y modelos guardados</li>
+          <li>Módulo de transporte</li>
+          <li>Preguntas frecuentes</li>
+          <li>Estructura del proyecto</li>
+        </ol>
+      </div>
+
+      <h3>Cómo leer este manual</h3>
+      <p>
+        Cada sección explica qué se ve en pantalla y qué tiene que hacer el usuario. Las
+        capturas son reales: se tomaron de la aplicación en funcionamiento, no son dibujos.
+      </p>
+
+      <div class="aviso info">
+        <span class="icono">ℹ</span>
+        <div>
+          <strong>La interfaz está en español y el cálculo es exacto.</strong>
+          Todos los valores que se muestran provienen del algoritmo simplex real que corre en el
+          servidor: no hay tablas fijas ni resultados precargados.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 1. QUÉ ES ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 1</div>
+      <h2>Qué es Linear Studio</h2>
+
+      <p>
+        Linear Studio resuelve problemas de programación lineal con el <strong>método
+        simplex</strong> y muestra <em>todo</em> el procedimiento: la forma estándar del modelo,
+        cada iteración con su tabla antes y después, la variable que entra, la que sale, el
+        elemento pivote, la prueba de razones y las operaciones de fila.
+      </p>
+
+      <h3>El recorrido en cuatro pasos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%">Paso</th>
+            <th style="width: 38%">Qué hace</th>
+            <th>Qué se ve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1 · Ingreso de datos</strong></td>
+            <td>Escribes el modelo: variables, objetivo y restricciones.</td>
+            <td>Formulario con vista previa en vivo.</td>
+          </tr>
+          <tr>
+            <td><strong>2 · Modelo y tabla inicial</strong></td>
+            <td>El servidor lo convierte a forma estándar.</td>
+            <td>Ecuaciones, variables agregadas y la tabla inicial.</td>
+          </tr>
+          <tr>
+            <td><strong>3 · Pivoteo</strong></td>
+            <td>El simplex itera pivoteando.</td>
+            <td>Cada iteración con su explicación y sus tablas.</td>
+          </tr>
+          <tr>
+            <td><strong>4 · Resultado final</strong></td>
+            <td>Se lee y se interpreta la solución.</td>
+            <td>Métricas, verificación, interpretación y precios sombra.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="aviso exito">
+        <span class="icono">✓</span>
+        <div>
+          <strong>El modelo se conserva al cambiar de paso.</strong>
+          Puedes volver atrás, corregir el modelo en el paso 1 y volver a preparar: el modelo no se
+          pierde al navegar.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 2. INSTALACIÓN ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 2</div>
+      <h2>Instalación y puesta en marcha</h2>
+
+      <h3>Requisitos</h3>
+      <ul>
+        <li><strong>Node.js</strong> 20 o superior (probado con 24.22.1 LTS).</li>
+        <li><strong>MongoDB</strong> 6 o superior (probado con 8.0), local o Atlas.</li>
+        <li>npm 10 o superior.</li>
+      </ul>
+
+      <h3>1. Base de datos</h3>
+      <pre><code># MongoDB local (Windows)
+mongod --dbpath C:\data\db --bind_ip 127.0.0.1
+
+# o con Docker
+docker run -d --name mongo -p 27017:27017 mongo:8</code></pre>
+
+      <h3>2. Backend</h3>
+      <pre><code>cd backend
+npm install
+cp .env.example .env     # ajusta MONGODB_URI si hace falta
+npm run seed              # carga los modelos de ejemplo
+npm run dev               # http://localhost:3000</code></pre>
+
+      <h3>3. Frontend</h3>
+      <pre><code>cd frontend
+npm install
+cp .env.example .env     # VITE_API_URL=http://localhost:3000
+npm run dev               # http://localhost:5173</code></pre>
+
+      <h4>Variables de entorno del backend</h4>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Variable</th>
+            <th style="width: 34%">Por defecto</th>
+            <th>Para qué sirve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">PORT</td>
+            <td class="mono">3000</td>
+            <td>Puerto del servidor Express.</td>
+          </tr>
+          <tr>
+            <td class="mono">CORS_ORIGIN</td>
+            <td class="mono">http://localhost:5173</td>
+            <td>Origen permitido por CORS (el frontend de Vite).</td>
+          </tr>
+          <tr>
+            <td class="mono">MONGODB_URI</td>
+            <td class="mono">mongodb://127.0.0.1:27017/linear-studio</td>
+            <td>Conexión a la base de datos.</td>
+          </tr>
+          <tr>
+            <td class="mono">JWT_SECRET</td>
+            <td>clave de desarrollo</td>
+            <td>Firma los tokens de sesión. <strong>Cámbiala en producción.</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="aviso aviso">
+        <span class="icono">!</span>
+        <div>
+          <strong>Si guardas el proyecto en el disco de Windows y usas WSL.</strong>
+          Vite no recibe los eventos de cambio de archivos ahí: el archivo <code
+            class="mono"
+            >frontend/vite.config.js</code
+          >
+          ya incluye <code class="mono">usePolling</code> para que la recarga funcione.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. PASO 1 ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 3</div>
+      <h2>Paso 1 · Ingreso de datos</h2>
+
+      <p>
+        Es la pantalla inicial. A la izquierda está el formulario y a la derecha la
+        <strong>vista previa</strong>, que se actualiza con cada tecla: sirve para comprobar que
+        el modelo es el que quieres antes de resolverlo.
+      </p>
+
+      <figure>
+        <img src="capturas/01-paso-1-ingreso-vacio.png" alt="Paso 1 con el formulario vacío" />
+        <figcaption>
+          Figura 1. El formulario vacío. A la derecha, la vista previa con el objetivo, las
+          restricciones y la condición de no negatividad.
+        </figcaption>
+      </figure>
+
+      <h3>Cómo llenar el modelo</h3>
+      <ol>
+        <li>
+          <strong>Número de variables.</strong> De 2 a 6. Solo se muestran las activas, con los
+          nombres <span class="mono">a, b, c, d, e, f</span>.
+        </li>
+        <li>
+          <strong>Tipo de optimización.</strong> Maximizar o minimizar. La opción elegida queda en
+          azul.
+        </li>
+        <li>
+          <strong>Función objetivo Z.</strong> Los coeficientes de cada variable.
+        </li>
+        <li>
+          <strong>Restricciones.</strong> Una fila por restricción, con un coeficiente por
+          variable, el signo (<span class="mono">≤</span>, <span class="mono">≥</span>,
+          <span class="mono">=</span>) y el término independiente. El botón
+          <strong>Agregar</strong> añade una fila y el icono de la papelera la quita.
+        </li>
+      </ol>
+
+      <figure>
+        <img src="capturas/03-paso-1-modelo-lleno.png" alt="Paso 1 con el modelo de referencia" />
+        <figcaption>
+          Figura 2. El modelo de referencia completo: <span class="mono">MAX Z = 3a + 5b</span> con
+          tres restricciones. La vista previa ya muestra las tres ecuaciones.
+        </figcaption>
+      </figure>
+
+      <h3>Errores de validación</h3>
+      <p>
+        Si algo falta, la aplicación lo dice <strong>antes</strong> de llamar al servidor, con los
+        mismos mensajes que usa el backend.
+      </p>
+
+      <figure>
+        <img src="capturas/02-paso-1-validacion.png" alt="Paso 1 con errores de validación" />
+        <figcaption>
+          Figura 3. Una restricción sin término independiente se reporta como «La restricción 1
+          está incompleta. Ingresa el término independiente o elimina la fila».
+        </figcaption>
+      </figure>
+
+      <div class="aviso exito">
+        <span class="icono">✓</span>
+        <div>
+          <strong>Botón «Preparar modelo».</strong> Envía el modelo al servidor, que lo resuelve y
+          devuelve todo el procedimiento. Si el problema no tiene solución óptima (es infactible o
+          no acotado) también lo indica con una explicación clara.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. PASO 2 ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 4</div>
+      <h2>Paso 2 · Modelo y tabla inicial</h2>
+
+      <p>
+        Aquí se ve el modelo ya convertido a <strong>forma estándar</strong>: las mismas
+        restricciones, pero con una variable de holgura (<span class="mono">≤</span>), de exceso y
+        artificial (<span class="mono">≥</span>) o solo artificial
+        (<span class="mono">=</span>) para poder tabularlo.
+      </p>
+
+      <figure>
+        <img src="capturas/04-paso-2-modelo-estandar.png" alt="Paso 2 con la forma estándar" />
+        <figcaption>
+          Figura 4. La forma estándar del modelo y la tabla inicial, con las variables básicas
+          <span class="mono">s1, s2, s3</span>.
+        </figcaption>
+      </figure>
+
+      <h3>Qué mirar en esta pantalla</h3>
+      <ul>
+        <li>
+          <strong>Sistema de ecuaciones:</strong> una línea por restricción, ya con las variables
+          agregadas.
+        </li>
+        <li>
+          <strong>Panel de variables agregadas:</strong> cada holgura, exceso o artificial, con la
+          restricción a la que pertenece.
+        </li>
+        <li>
+          <strong>Tabla inicial:</strong> la fila <span class="mono">Z</span> guarda los costos
+          reducidos; la última columna es el término independiente (RHS).
+        </li>
+      </ul>
+
+      <div class="aviso info">
+        <span class="icono">ℹ</span>
+        <div>
+          <strong>Si hay una restricción <span class="mono">≥</span> o <span class="mono">=</span>,
+          el método empieza en la Fase 1.</strong> La tabla inicial se rotula <span class="mono">W</span>
+          y el objetivo es minimizar la suma de las variables artificiales
+          <span class="mono">A</span>. Cuando <span class="mono">W</span> llega a cero se pasa a
+          la Fase 2 con el objetivo <span class="mono">Z</span>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 5. PASO 3 ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 5</div>
+      <h2>Paso 3 · Pivoteo</h2>
+
+      <p>
+        Es el corazón del sistema: <strong>cada iteración</strong> del simplex, con su
+        explicación. La iteración 0 es la tabla inicial; desde ahí se navega con
+        <strong>Anterior</strong>, <strong>Siguiente</strong> o el selector <em>Ir a la
+        iteración</em>.
+      </p>
+
+      <figure>
+        <img src="capturas/05-paso-3-tabla-inicial.png" alt="Paso 3 en la iteración 0" />
+        <figcaption>
+          Figura 5. La iteración 0: la tabla con la que arranca el método.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="capturas/06-paso-3-iteracion-1.png" alt="Paso 3 en la iteración 1" />
+        <figcaption>
+          Figura 6. La iteración 1 completa: las tres tarjetas de decisión, la prueba de razones,
+          las operaciones de fila y las tablas antes y después con el pivote resaltado.
+        </figcaption>
+      </figure>
+
+      <h3>Las tres tarjetas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 26%">Tarjeta</th>
+            <th style="width: 16%">Color</th>
+            <th>Qué significa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Variable entrante</strong></td>
+            <td>Azul</td>
+            <td>
+              La que entra a la base. Se elige por tener el coeficiente más negativo en la fila Z
+              (el costo reducido más favorable).
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Variable saliente</strong></td>
+            <td>Ámbar</td>
+            <td>
+              La que sale de la base. Se elige por la <strong>menor razón</strong> de la prueba de
+              cocientes.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Elemento pivote</strong></td>
+            <td>Neutro</td>
+            <td>El número que se hace 1 al dividir la fila pivote.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>La prueba de razones</h3>
+      <p>
+        Solo entran en la división las filas con coeficiente <strong>positivo</strong> en la
+        columna que entra. Las demás se marcan con «—» y la nota lo explica. La fila que sale
+        queda resaltada en ámbar.
+      </p>
+
+      <h3>Las operaciones de fila</h3>
+      <p>
+        Se listan numeradas y con la fórmula exacta, para que se pueda seguir el álgebra:
+        <span class="mono">F2 ← F2 / 2</span> normaliza la fila pivote y
+        <span class="mono">FZ ← FZ + 5·F2</span> elimina la columna en la fila Z.
+      </p>
+
+      <div class="aviso exito">
+        <span class="icono">✓</span>
+        <div>
+          <strong>El resaltado del pivote.</strong> En las tablas, la columna y la fila del pivote
+          quedan en azul muy suave y la celda del pivote tiene además un borde: se ve de un vistazo
+          qué se está pivoteando.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 6. PASO 4 ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 6</div>
+      <h2>Paso 4 · Resultado final</h2>
+
+      <p>
+        La solución, con todo lo necesario para <strong>verificarla</strong>: el valor de Z, el de
+        cada variable, el de las holguras, la comprobación restricción por restricción y la
+        interpretación en lenguaje natural.
+      </p>
+
+      <figure>
+        <img src="capturas/07-paso-4-resultado.png" alt="Paso 4 con el resultado final" />
+        <figcaption>
+          Figura 7. El resultado del modelo de referencia: Z = 36 con a = 2, b = 6 y s₁ = 2.
+        </figcaption>
+      </figure>
+
+      <h3>La tabla de verificación</h3>
+      <p>
+        Se comprueba cada restricción sustituyendo la solución: el lado izquierdo, el signo, el
+        término independiente, la holgura que queda y si la restricción está <strong>activa</strong>
+        (es decir, si se cumple con igualdad). En el ejemplo, las restricciones 2 y 3 están activas
+        porque no les queda holgura.
+      </p>
+
+      <h3>Los precios sombra</h3>
+      <p>
+        Dicen <strong>cuánto cambia Z si el término independiente de una restricción sube en una
+        unidad</strong>. En el ejemplo, el precio sombra de la restricción 2 es 1.5: si su término
+        independiente pasa de 12 a 13, el valor óptimo pasaría de 36 a 37.5.
+      </p>
+
+      <div class="aviso info">
+        <span class="icono">ℹ</span>
+        <div>
+          <strong>La precisión decimal no recalcula nada.</strong> El cálculo del servidor es
+          exacto (fracciones); el selector solo cambia cuántos decimales se muestran. Es la
+          diferencia entre <span class="mono">3/2</span> y <span class="mono">1.50</span>.
+        </div>
+      </div>
+
+      <h3>Acciones disponibles</h3>
+      <ul>
+        <li><strong>Ver iteraciones:</strong> vuelve al paso 3.</li>
+        <li>
+          <strong>Exportar resumen:</strong> descarga un archivo de texto con el modelo, la
+          solución y las restricciones.
+        </li>
+        <li><strong>Nuevo modelo:</strong> limpia todo y vuelve al paso 1.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== 7. SESIÓN ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 7</div>
+      <h2>Sesión y modelos guardados</h2>
+
+      <p>
+        Para guardar modelos hace falta una cuenta. La barra superior lleva el botón
+        <strong>Modelos guardados</strong> y el estado <em>Guardado</em> / <em>Sin guardar</em>.
+      </p>
+
+      <figure>
+        <img src="capturas/11-sesion.png" alt="Panel de inicio de sesión" />
+        <figcaption>
+          Figura 8. El panel de sesión: iniciar sesión, crear cuenta o restablecer la contraseña.
+        </figcaption>
+      </figure>
+
+      <h3>El flujo</h3>
+      <ol>
+        <li>Pulsa <strong>Modelos guardados</strong> o <strong>Guardar</strong> en la barra superior.</li>
+        <li>Crea una cuenta con nombre, correo y contraseña (mínimo 6 caracteres).</li>
+        <li>Al guardar, el modelo se almacena <strong>con su resolución completa</strong>.</li>
+        <li>
+          Desde el panel puedes abrir un modelo guardado: se recupera el procedimiento entero
+          <strong>sin volver a calcular</strong>.
+        </li>
+      </ol>
+
+      <div class="aviso aviso">
+        <span class="icono">!</span>
+        <div>
+          <strong>Recuperación de contraseña sin servidor de correo.</strong> Por simplicidad, el
+          token de recuperación se muestra en pantalla (modo demostración) y se usa para
+          restablecer la contraseña. En producción se enviaría por correo.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 8. TRANSPORTE ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 8</div>
+      <h2>Módulo de transporte</h2>
+
+      <p>
+        Como extensión, el sidebar incluye un módulo de <strong>problemas de transporte</strong>:
+        se definen las ofertas de cada origen, las demandas de cada destino y los costos de cada
+        ruta, y la aplicación compila esa matriz a un modelo de programación lineal que resuelve
+        con el mismo método simplex.
+      </p>
+
+      <figure>
+        <img src="capturas/08-transporte-editor.png" alt="Editor del problema de transporte" />
+        <figcaption>
+          Figura 9. El editor de la matriz de costos con las ofertas y las demandas.
+        </figcaption>
+      </figure>
+
+      <h3>Cómo se compila</h3>
+      <ul>
+        <li>Una variable <span class="mono">x_ij</span> por ruta, con el costo como coeficiente de Z.</li>
+        <li>Una restricción <span class="mono">≤</span> por origen, con su oferta.</li>
+        <li>Una restricción <span class="mono">=</span> por destino, con su demanda.</li>
+        <li>El objetivo es <strong>minimizar</strong> el costo total del envío.</li>
+      </ul>
+
+      <figure>
+        <img src="capturas/09-transporte-plan.png" alt="Plan de envío del problema de transporte" />
+        <figcaption>
+          Figura 10. El plan de envío: las rutas con carga resaltadas y el costo total.
+        </figcaption>
+      </figure>
+
+      <div class="aviso exito">
+        <span class="icono">✓</span>
+        <div>
+          <strong>El plan de envío es la solución óptima.</strong> En el ejemplo de la figura, con
+          ofertas de 20 y 30 unidades y demandas de 12 y 18, el costo mínimo es
+          <strong>102</strong>: se envían 12 unidades de O1 a D1 y 18 de O2 a D2. Los precios sombra
+          de las demandas son 4 y 3, que es el costo de servir una unidad adicional en cada
+          destino.
+        </div>
+      </div>
+
+      <figure>
+        <img src="capturas/10-transporte-procedimiento.png" alt="Procedimiento simplex del transporte" />
+        <figcaption>
+          Figura 11. El botón «Ver el procedimiento simplex» abre el pivoteo del modelo compilado,
+          con su Fase 1 y su Fase 2.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ===================== 9. FAQ ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 9</div>
+      <h2>Preguntas frecuentes</h2>
+
+      <h3>¿El resultado está precargado?</h3>
+      <p>
+        No. Cada número que aparece lo calculó el servidor ejecutando el simplex sobre el modelo
+        que escribiste, con aritmética exacta de fracciones.
+      </p>
+
+      <h3>¿Por qué el problema mínimo usa un objetivo con signo negativo?</h3>
+      <p>
+        El tableau siempre maximize. Para minimizar <span class="mono">Z</span> se resuelve el
+        problema auxiliar <span class="mono">MAX (−Z)</span>, que se rotula <span class="mono">Z′</span>,
+        y al final se revierte el signo para presentar el valor de <span class="mono">Z</span>. La
+        propia pantalla lo explica.
+      </p>
+
+      <h3>¿Qué pasa si el problema no tiene solución?</h3>
+      <p>
+        Si es <strong>infactible</strong> (las restricciones se contradicen) o <strong>no
+        acotado</strong> (el objetivo se puedeImprove sin límite), la aplicación lo indica con una
+        alerta y una explicación, y deja las iteraciones realizadas para poder ver el
+        procedimiento.
+      </p>
+
+      <h3>¿Cómo se eligen las variables entrante y saliente?</h3>
+      <p>
+        La entrante es la de coeficiente más negativo en la fila Z; si hay empate, la más a la
+        izquierda. La saliente es la de menor razón; si hay empate, la de la fila más arriba.
+        Además, a partir de la iteración 50 se aplica la regla de Bland para garantizar que el
+        método termina.
+      </p>
+
+      <h3>¿Puedo volver atrás sin perder lo escrito?</h3>
+      <p>
+        Sí. El modelo se conserva al cambiar de paso; solo se descarta si pulsas
+        <strong>Reiniciar</strong> o <strong>Nuevo modelo</strong>, y en ese caso la aplicación
+        pide confirmación.
+      </p>
+    </section>
+
+    <!-- ===================== 10. ESTRUCTURA ===================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 10</div>
+      <h2>Estructura del proyecto</h2>
+
+      <pre><code>mr-simplex/
+├── backend/                  API (Express + MongoDB)
+│   ├── src/
+│   │   ├── services/         solver simplex: forma estándar, pivoteo, dos fases
+│   │   ├── controllers/      controladores de la API
+│   │   ├── routes/           rutas
+│   │   ├── middlewares/      CORS, errores y autenticación
+│   │   ├── models/           esquemas Mongoose
+│   │   └── utils/            fracciones exactas, tokens y contraseñas
+│   ├── seed/                 script de carga inicial de datos
+│   ├── test/                 pruebas (Vitest)
+│   └── HISTORIAS.md          control de avance
+│
+├── frontend/                 interfaz (React + Vite + Tailwind)
+│   ├── src/
+│   │   ├── steps/            los cuatro pasos del método
+│   │   ├── layout/           barra lateral, barra superior, indicador
+│   │   ├── components/       tabla del simplex, sesión, transporte
+│   │   ├── estado/           estado global de la aplicación
+│   │   ├── services/         llamadas a la API
+│   │   └── styles/           tokens del sistema de diseño
+│   ├── documentacion/        este manual y sus capturas
+│   ├── test/                 pruebas (Vitest + Testing Library)
+│   └── HISTORIAS.md          control de avance
+│</code></pre>
+
+      <h3>Comandos útiles</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 46%">Comando</th>
+            <th>Qué hace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">backend: npm test</td>
+            <td>Corre las 271 pruebas del backend.</td>
+          </tr>
+          <tr>
+            <td class="mono">backend: npm run coverage</td>
+            <td>Pruebas con informe de cobertura.</td>
+          </tr>
+          <tr>
+            <td class="mono">backend: npm run seed</td>
+            <td>Recarga los modelos de ejemplo.</td>
+          </tr>
+          <tr>
+            <td class="mono">frontend: npm test</td>
+            <td>Corre las 39 pruebas del frontend.</td>
+          </tr>
+          <tr>
+            <td class="mono">frontend: node scripts/capturas.mjs</td>
+            <td>Repite el recorrido real y regenera las capturas de este manual.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pie">
+        Linear Studio · Manual de usuario · Investigación de Operaciones — Universidad Mariano
+        Gálvez de Guatemala · Octubre de 2026
+      </div>
+    </section>
+  </body>
+</html>

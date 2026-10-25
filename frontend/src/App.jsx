@@ -216,6 +216,7 @@ function Aplicacion() {
 
       <PanelSesion
         abierto={panelSesion}
+        mensaje={avisoSesion}
         onCerrar={() => {
           setPanelSesion(false);
           setAvisoSesion(null);

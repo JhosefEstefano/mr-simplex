@@ -17,7 +17,7 @@ const VISTAS = {
  * La recuperación devuelve el token en pantalla porque el proyecto no
  * incluye servidor de correo (modo demostración).
  */
-export default function PanelSesion({ abierto, onCerrar, onSesionIniciada }) {
+export default function PanelSesion({ abierto, onCerrar, onSesionIniciada, mensaje }) {
   const { dispatch } = useSimplex();
 
   const [vista, setVista] = useState('ingreso');
@@ -89,6 +89,7 @@ export default function PanelSesion({ abierto, onCerrar, onSesionIniciada }) {
         </header>
 
         <form onSubmit={enviar} className="flex flex-col gap-4 px-5 py-5">
+          {mensaje ? <Alert variante="advertencia">{mensaje}</Alert> : null}
           {error ? <Alert variante="error">{error}</Alert> : null}
           {aviso ? <Alert variante="info">{aviso}</Alert> : null}
 

@@ -136,3 +136,23 @@ npm test
 Cubren las utilidades (fracción, modelo y transporte), el paso 1 (renderizado, validación en vivo y
 envío al backend), el editor de transporte y un **recorrido completo** por los cuatro pasos con la
 respuesta real del solver.
+
+## 11. Documentación y capturas
+
+En `documentacion/` está el **manual de usuario** y las capturas que lo ilustran:
+
+- `documentacion/manual-linear-studio.pdf` — manual listo para entregar (10 secciones, 11 figuras).
+- `documentacion/manual.html` — la fuente del PDF, por si se quiere editarlo.
+- `documentacion/capturas/` — las once capturas reales de la aplicación.
+
+Las capturas no son dibujos: se toman **pilotando el navegador de verdad**, con lo que el script
+además comprueba que cada pantalla muestre lo que debe:
+
+```bash
+npm run capturas   # recorre la app con Edge, comprueba y captura
+npm run manual     # genera el PDF a partir de manual.html
+```
+
+> El script usa el Edge instalado (`BROWSER_CHANNEL=msedge`, el valor por defecto). En Linux:
+> `BROWSER_CHANNEL=chromium` tras `npx playwright install chromium`.
+> Requiere el backend levantado en `http://localhost:3000`.

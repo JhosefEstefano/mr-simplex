@@ -80,3 +80,11 @@ Convención: `FE-<épica>.<n>`.
 - [x] **FE-8.2** Compilador de la matriz a un modelo de programación lineal con `nombresVariables` `x_ij`.
 - [x] **FE-8.3** Presentación del resultado como matriz de asignación y plan de envío.
 - [x] **FE-8.4** Enlace al procedimiento simplex del modelo compilado.
+
+## Épica 9 — Documentación y recorrido real
+
+- [x] **FE-9.1** Recorrido automatizado con un navegador real que comprueba las 4 pantallas y el transporte (20 comprobaciones).
+- [x] **FE-9.2** Once capturas reales de la aplicación.
+- [x] **FE-9.3** Manual de usuario en HTML con las capturas.
+- [x] **FE-9.4** PDF del manual listo para entregar.
+- [x] **FE-9.5** Nota de `usePolling` en Vite para que la recarga funcione en el disco de Windows.
