@@ -296,6 +296,8 @@ try {
   );
   await capturar('23-jonnathan-minimizacion.png');
 
+  await pagina.getByRole('button', { name: /Ver pivoteo/i }).click();
+  await pagina.waitForSelector('h1:has-text("Pivoteo")');
   await pagina.getByRole('button', { name: /Ver resultado/i }).click();
   await pagina.waitForSelector('h1:has-text("Resultado final")');
   await pagina.waitForTimeout(400);
@@ -309,6 +311,48 @@ try {
   await pagina.waitForSelector('text=/Inicia sesión para ver tus modelos guardados/i');
   await pagina.waitForTimeout(300);
   await capturarPanel('11-sesion.png');
+
+
+  /* ---------------------------------------------------------------- */
+  console.log('\n▶ Cuenta y persistencia (Jonnathan y Richard)');
+
+  await pagina.goto(URL_APP, { waitUntil: 'networkidle' });
+  await pagina.getByRole('button', { name: /Modelos guardados/i }).click();
+  await pagina.waitForSelector('text=/Inicia sesión para ver tus modelos guardados/i');
+  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
+  await pagina.waitForTimeout(300);
+  await capturarPanel('25-richard-crear-cuenta.png');
+
+  const correo = `equipo${Date.now()}@umg.edu.gt`;
+  await pagina.getByLabel('Nombre').fill('Equipo Linear Studio');
+  await pagina.getByLabel('Correo').fill(correo);
+  await pagina.getByLabel('Contraseña').fill('simplex2026');
+  await pagina.getByRole('button', { name: /Crear cuenta/i }).click();
+
+  await pagina.waitForSelector('text=/Modelos guardados/i', { timeout: 20000 });
+  await pagina.waitForTimeout(500);
+  verificar('La cuenta se crea y queda la sesión iniciada', await pagina.isVisible('text=Guardar'));
+
+  // Se prepara y guarda un modelo para que aparezca en el historial.
+  await pagina.getByRole('button', { name: /^Ingreso de datos/ }).click();
+  await prepararModelo({
+    numVariables: 2,
+    objetivo: 'MAX',
+    coeficientesZ: [3, 5],
+    restricciones: [
+      { coeficientes: [1, 0], signo: '<=', rhs: 4 },
+      { coeficientes: [0, 2], signo: '<=', rhs: 12 },
+      { coeficientes: [3, 2], signo: '<=', rhs: 18 }
+    ]
+  });
+  await pagina.getByRole('button', { name: /^Guardar$/ }).click();
+  await pagina.waitForTimeout(1200);
+
+  await pagina.getByRole('button', { name: /Modelos guardados/i }).click();
+  await pagina.waitForSelector('text=/Ejemplo|Modelo/', { timeout: 20000 });
+  await pagina.waitForTimeout(500);
+  verificar('El modelo guardado aparece en el historial', await pagina.isVisible('text=/Maximización|OPTIMO/'));
+  await capturarPanel('26-jonnathan-modelos-guardados.png');
 
   verificar('No hay errores en la consola', erroresConsola.length === 0, erroresConsola.join(' | '));
 } catch (error) {

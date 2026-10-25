@@ -83,8 +83,18 @@ Convención: `FE-<épica>.<n>`.
 
 ## Épica 9 — Documentación y recorrido real
 
-- [x] **FE-9.1** Recorrido automatizado con un navegador real que comprueba las 4 pantallas y el transporte (20 comprobaciones).
-- [x] **FE-9.2** Once capturas reales de la aplicación.
+- [x] **FE-9.1** Recorrido automatizado con un navegador real que comprueba las 4 pantallas y el transporte (27 comprobaciones).
+- [x] **FE-9.2** Diecinueve capturas reales de la aplicación.
 - [x] **FE-9.3** Manual de usuario en HTML con las capturas.
 - [x] **FE-9.4** PDF del manual listo para entregar.
 - [x] **FE-9.5** Nota de `usePolling` en Vite para que la recarga funcione en el disco de Windows.
+
+## Épica 10 — Guía de presentación y manual del equipo
+
+- [x] **FE-10.1** Avatares del equipo con sus iniciales.
+- [x] **FE-10.2** Tabla de reparto de responsabilidades con los archivos de cada parte.
+- [x] **FE-10.3** Guion de la presentación por bloques, con quién lo dice.
+- [x] **FE-10.4** Ficha individual por integrante: qué debe saber, sus archivos, su guion, preguntas con respuesta y errores que no debe cometer.
+- [x] **FE-10.5** Anexo de equivalencias con Python (Flask/SQLite) para la defensa.
+- [x] **FE-10.6** Declaración del uso de herramientas de IA.
+- [x] **FE-10.7** PDF del manual del equipo.

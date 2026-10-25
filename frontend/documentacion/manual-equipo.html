@@ -1,0 +1,1866 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Linear Studio — Manual del equipo y guía de presentación</title>
+    <style>
+      :root {
+        --background: #f8fafc;
+        --foreground: #0f172a;
+        --card: #ffffff;
+        --muted: #f1f5f9;
+        --muted-foreground: #64748b;
+        --border: #e2e8f0;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-soft: #eff6ff;
+        --success: #15803d;
+        --success-soft: #f0fdf4;
+        --success-border: #bbf7d0;
+        --warning: #b45309;
+        --warning-soft: #fffbeb;
+        --warning-border: #fde68a;
+        --destructive: #dc2626;
+        --destructive-soft: #fef2f2;
+        --destructive-border: #fecaca;
+        --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+      }
+
+      @page {
+        size: A4;
+        margin: 17mm 15mm 15mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        font-size: 10.2pt;
+        line-height: 1.55;
+      }
+
+      /* ---------- Portada ---------- */
+      .portada {
+        page-break-after: always;
+        height: 250mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-top: 6px solid var(--primary);
+      }
+
+      .marca {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .marca-icono {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .marca-nombre {
+        font-size: 19pt;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      .marca-sub {
+        font-size: 9pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--muted-foreground);
+        text-transform: uppercase;
+      }
+
+      h1 {
+        font-size: 29pt;
+        line-height: 1.15;
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+
+      .portada .bajada {
+        font-size: 12.5pt;
+        color: var(--muted-foreground);
+        margin: 0 0 24px;
+        max-width: 132mm;
+      }
+
+      .equipo-portada {
+        display: flex;
+        gap: 10px;
+        margin: 6px 0 26px;
+        flex-wrap: wrap;
+      }
+
+      .equipo-portada .persona {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        width: 30mm;
+      }
+
+      .equipo-portada img {
+        width: 17mm;
+        height: 17mm;
+        border-radius: 9px;
+      }
+
+      .equipo-portada span {
+        font-size: 7.6pt;
+        text-align: center;
+        color: var(--muted-foreground);
+        line-height: 1.25;
+      }
+
+      .portada-datos {
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+        font-size: 9.6pt;
+        color: var(--muted-foreground);
+      }
+
+      .portada-datos strong {
+        color: var(--foreground);
+      }
+
+      /* ---------- Estructura ---------- */
+      h2 {
+        font-size: 16.5pt;
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+        page-break-after: avoid;
+      }
+
+      h3 {
+        font-size: 12pt;
+        margin: 16px 0 5px;
+        page-break-after: avoid;
+      }
+
+      h4 {
+        font-size: 10.4pt;
+        margin: 12px 0 3px;
+        page-break-after: avoid;
+      }
+
+      p {
+        margin: 0 0 8px;
+      }
+
+      ul,
+      ol {
+        margin: 0 0 9px;
+        padding-left: 17px;
+      }
+
+      li {
+        margin-bottom: 3px;
+      }
+
+      .seccion {
+        page-break-before: always;
+      }
+
+      .eyebrow {
+        font-size: 8.4pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 2px;
+      }
+
+      .mono {
+        font-family: var(--font-mono);
+      }
+
+      code {
+        font-family: var(--font-mono);
+        font-size: 9.2pt;
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 4px;
+      }
+
+      pre {
+        font-family: var(--font-mono);
+        font-size: 8.8pt;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 10px 12px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 0 0 11px;
+        line-height: 1.5;
+      }
+
+      pre code {
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 0;
+        font-size: 8.8pt;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 13px;
+        font-size: 9.3pt;
+      }
+
+      th {
+        background: var(--background);
+        color: var(--muted-foreground);
+        font-size: 8.4pt;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+      }
+
+      figure {
+        margin: 0 0 14px;
+        page-break-inside: avoid;
+      }
+
+      figure img {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: block;
+      }
+
+      figcaption {
+        font-size: 8.8pt;
+        color: var(--muted-foreground);
+        margin-top: 5px;
+        padding-left: 9px;
+        border-left: 2px solid var(--primary);
+      }
+
+      /* ---------- Avisos ---------- */
+      .aviso {
+        display: flex;
+        gap: 9px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 11px;
+        margin: 0 0 12px;
+        font-size: 9.6pt;
+        page-break-inside: avoid;
+      }
+
+      .aviso .icono {
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .aviso.info {
+        background: var(--primary-soft);
+        border-color: #dbeafe;
+      }
+      .aviso.info .icono {
+        color: var(--primary);
+      }
+      .aviso.exito {
+        background: var(--success-soft);
+        border-color: var(--success-border);
+      }
+      .aviso.exito .icono {
+        color: var(--success);
+      }
+      .aviso.aviso {
+        background: var(--warning-soft);
+        border-color: var(--warning-border);
+      }
+      .aviso.aviso .icono {
+        color: var(--warning);
+      }
+      .aviso.error {
+        background: var(--destructive-soft);
+        border-color: var(--destructive-border);
+      }
+      .aviso.error .icono {
+        color: var(--destructive);
+      }
+
+      .aviso strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      /* ---------- Índice ---------- */
+      .indice {
+        background: var(--background);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 13px 17px;
+        margin-bottom: 16px;
+      }
+
+      .indice ol {
+        margin: 0;
+        padding-left: 17px;
+        columns: 2;
+        column-gap: 22px;
+      }
+
+      .indice li {
+        break-inside: avoid;
+      }
+
+      /* ---------- Equipo ---------- */
+      .ficha {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 18px;
+        page-break-inside: avoid;
+      }
+
+      .ficha-cabecera {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        background: var(--background);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .ficha-cabecera img {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        flex-shrink: 0;
+      }
+
+      .ficha-cabecera .datos {
+        min-width: 0;
+      }
+
+      .ficha-cabecera .nombre {
+        font-size: 13pt;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .ficha-cabecera .rol {
+        font-size: 9.2pt;
+        color: var(--muted-foreground);
+        margin-top: 2px;
+      }
+
+      .ficha-cuerpo {
+        padding: 12px 14px;
+      }
+
+      .etiqueta {
+        font-size: 8.4pt;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin: 12px 0 4px;
+      }
+
+      .ficha-cuerpo > .etiqueta:first-child {
+        margin-top: 0;
+      }
+
+      .guion {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 9.4pt;
+        line-height: 1.5;
+        margin: 0 0 6px;
+      }
+
+      .guion strong {
+        color: #93c5fd;
+      }
+
+      .pregunta {
+        border-left: 3px solid var(--border);
+        padding: 2px 0 2px 10px;
+        margin: 0 0 9px;
+      }
+
+      .pregunta .p {
+        font-weight: 600;
+        font-size: 9.8pt;
+        margin-bottom: 2px;
+      }
+
+      .pregunta .r {
+        font-size: 9.6pt;
+        color: #334155;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin: 0 0 8px;
+      }
+
+      .chip {
+        font-family: var(--font-mono);
+        font-size: 8.6pt;
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 2px 6px;
+        color: #334155;
+      }
+
+      .pie {
+        margin-top: 20px;
+        padding-top: 9px;
+        border-top: 1px solid var(--border);
+        font-size: 8.4pt;
+        color: var(--muted-foreground);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ==================== PORTADA ==================== -->
+    <section class="portada">
+      <div class="marca">
+        <div class="marca-icono">LS</div>
+        <div>
+          <div class="marca-nombre">Linear Studio</div>
+          <div class="marca-sub">Optimización · LP</div>
+        </div>
+      </div>
+
+      <h1>Manual del equipo</h1>
+      <p class="bajada">
+        Guía de uso del sistema, guía de la presentación y ficha individual de cada
+        integrante: qué le toca, qué debe saber y cómo responderlo.
+      </p>
+
+      <div class="equipo-portada">
+        <div class="persona">
+          <img src="equipo/jhosef.svg" alt="" />
+          <span>Jhosef<br />Reyes Román</span>
+        </div>
+        <div class="persona">
+          <img src="equipo/oscar.svg" alt="" />
+          <span>Oscar<br />Gonzalez Rojas</span>
+        </div>
+        <div class="persona">
+          <img src="equipo/alejandro.svg" alt="" />
+          <span>Alejandro<br />Leiva Garcia</span>
+        </div>
+        <div class="persona">
+          <img src="equipo/jonnathan.svg" alt="" />
+          <span>Jonnathan<br />Tiul Ramirez</span>
+        </div>
+        <div class="persona">
+          <img src="equipo/richard.svg" alt="" />
+          <span>Richard<br />Apolonio Ramirez</span>
+        </div>
+      </div>
+
+      <div class="portada-datos">
+        <p style="margin: 0 0 4px">
+          <strong>Curso:</strong> Investigación de Operaciones — Universidad Mariano Gálvez de
+          Guatemala
+        </p>
+        <p style="margin: 0 0 4px">
+          <strong>Entrega:</strong> 25 de octubre de 2026
+        </p>
+        <p style="margin: 0">
+          <strong>Repositorio:</strong> github.com/JhosefEstefano/mr-simplex
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== ÍNDICE ==================== -->
+    <section>
+      <div class="eyebrow">Contenido</div>
+      <h2>Índice</h2>
+
+      <div class="indice">
+        <ol>
+          <li>El sistema en un minuto</li>
+          <li>Qué le toca a cada uno</li>
+          <li>Guía de la presentación</li>
+          <li>Ficha · Jhosef Reyes Román</li>
+          <li>Ficha · Oscar Gonzalez Rojas</li>
+          <li>Ficha · Alejandro Leiva Garcia</li>
+          <li>Ficha · Jonnathan Tiul Ramirez</li>
+          <li>Ficha · Richard Apolonio Ramirez</li>
+          <li>Anexo técnico</li>
+          <li>Equivalencias con Python</li>
+          <li>Uso de herramientas de IA</li>
+          <li>Preguntas frecuentes</li>
+        </ol>
+      </div>
+
+      <div class="aviso aviso">
+        <span class="icono">⚠</span>
+        <div>
+          <strong>Lee esto antes de presentar.</strong>
+          El sistema está construido con <strong>Node.js + Express + MongoDB</strong>, no con
+          Python/Flask/SQLite. Si alguien pregunta por Flask, la respuesta correcta es la de la
+          sección 10: la lógica matemática es la misma, el lenguaje es JavaScript.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 1. EL SISTEMA ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 1</div>
+      <h2>El sistema en un minuto</h2>
+
+      <p>
+        Linear Studio resuelve problemas de programación lineal con el <strong>método
+        simplex</strong> y muestra <em>todo</em> el procedimiento: la forma estándar del modelo,
+        cada iteración con su tabla antes y después, la variable que entra, la que sale, el
+        elemento pivote, la prueba de razones y las operaciones de fila.
+      </p>
+
+      <h3>El recorrido en cuatro pasos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 24%">Paso</th>
+            <th style="width: 36%">Qué hace</th>
+            <th>Qué se ve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1 · Ingreso de datos</strong></td>
+            <td>Escribes el modelo: variables, objetivo y restricciones.</td>
+            <td>Formulario con vista previa en vivo.</td>
+          </tr>
+          <tr>
+            <td><strong>2 · Modelo y tabla inicial</strong></td>
+            <td>El servidor lo convierte a forma estándar.</td>
+            <td>Ecuaciones, variables agregadas y la tabla inicial.</td>
+          </tr>
+          <tr>
+            <td><strong>3 · Pivoteo</strong></td>
+            <td>El simplex itera pivoteando.</td>
+            <td>Cada iteración con su explicación y sus tablas.</td>
+          </tr>
+          <tr>
+            <td><strong>4 · Resultado final</strong></td>
+            <td>Se lee y se interpreta la solución.</td>
+            <td>Métricas, verificación, interpretación y precios sombra.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Lo que el sistema sabe hacer</h3>
+      <ul>
+        <li><strong>Maximizar y minimizar</strong> (el mínimo se resuelve maximizando −Z).</li>
+        <li><strong>Método de dos fases</strong> para restricciones <span class="mono">≥</span> y
+          <span class="mono">=</span>.</li>
+        <li><strong>Cálculo exacto</strong>: todas las operaciones son fracciones, sin error de
+          punto flotante.</li>
+        <li><strong>Casos especiales</strong>: no acotado, infactible, degeneración y soluciones
+          óptimas múltiples.</li>
+        <li><strong>Análisis</strong>: verificación de restricciones y precios sombra.</li>
+        <li><strong>Persistencia</strong>: cuentas, modelos guardados e historial.</li>
+        <li><strong>Módulo de transporte</strong> como extensión.</li>
+      </ul>
+
+      <h3>Ejemplo de referencia</h3>
+      <pre><code>Maximizar  Z = 3a + 5b
+sujeto a   a       ≤ 4
+           2b      ≤ 12
+           3a + 2b ≤ 18
+           a, b ≥ 0
+
+Solución:  a = 2,  b = 6,  Z = 36</code></pre>
+    </section>
+
+    <!-- ==================== 2. REPARTO ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 2</div>
+      <h2>Qué le toca a cada uno</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%">Integrante</th>
+            <th style="width: 40%">Su parte</th>
+            <th>Archivos que domina</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Jhosef</strong><br />Reyes Román</td>
+            <td>
+              Captura y validación de datos; motor de cálculo y capa de la API.
+            </td>
+            <td class="mono" style="font-size: 8.6pt">
+              PasoIngreso.jsx · modelo.js · validarModelo.js · fraccion.js · simplex.js · app.js
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Oscar</strong><br />Gonzalez Rojas</td>
+            <td>
+              Forma estándar, tableau inicial y selección del pivote.
+            </td>
+            <td class="mono" style="font-size: 8.6pt">
+              formaEstandar.js · tabla.js · variableEntrante() · calcularRazones() ·
+              variableSaliente()
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Alejandro</strong><br />Leiva Garcia</td>
+            <td>
+              Iteraciones, explicaciones y casos especiales (incluidas las soluciones múltiples).
+            </td>
+            <td class="mono" style="font-size: 8.6pt">
+              pivotear() · registro de iteraciones · casosLimite.test.js ·
+              solucionesMultiples.test.js
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Jonnathan</strong><br />Tiul Ramirez</td>
+            <td>
+              Max/Min, interpretación de la solución y <strong>la base de datos</strong>; también
+              la autenticación.
+            </td>
+            <td class="mono" style="font-size: 8.6pt">
+              conversión Z′ · interpretacion · sensibilidad · models/ · auth.service.js ·
+              modelos.controller.js · seed/
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Richard</strong><br />Apolonio Ramirez</td>
+            <td>
+              Interfaz (los cuatro pasos y las tablas), plan de pruebas y este manual.
+            </td>
+            <td class="mono" style="font-size: 8.6pt">
+              steps/ · TablaSimplex.jsx · EditorTransporte.jsx · styles/tokens.css · test/ ·
+              scripts/capturas.mjs
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="aviso info">
+        <span class="icono">ℹ</span>
+        <div>
+          <strong>Todos defendemos el mismo sistema, pero cada uno explica su parte.</strong>
+          La nota es individual: lo que se evalúa es que cada integrante pueda abrir su código y
+          explicarlo sin leer. Las fichas de las secciones 4 a 8 dicen exactamente qué mirar.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. GUÍA DE PRESENTACIÓN ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 3</div>
+      <h2>Guía de la presentación</h2>
+
+      <p>
+        El guion completo dura unos <strong>6 minutos</strong>. Cada bloque indica quién lo dice y
+        qué pantalla hay abierta. Las palabras entre comillas son sugeridas: con que se diga la
+        idea, vale.
+      </p>
+
+      <h3>Bloque 0 · Introducción (cualquiera · 20 segundos)</h3>
+      <div class="guion">
+        “Nuestro sistema resuelve problemas de programación lineal con el método simplex y muestra
+        cada tabla paso a paso. Usamos <strong>Node.js con Express y MongoDB</strong>. Este
+        maquetado usa un ejemplo: maximizar Z = 3a + 5b con tres restricciones.”
+      </div>
+
+      <h3>Bloque 1 · Pantalla 1, el ingreso del modelo <em>(Jhosef)</em></h3>
+      <div class="guion">
+        “Aquí el usuario elige Max o Min, de 2 a 6 variables, y escribe los coeficientes y las
+        restricciones. Si falta un dato, el sistema muestra un error claro.”
+      </div>
+      <p style="font-size: 9.4pt; color: var(--muted-foreground)">
+        <strong>Qué tener listo:</strong> el formulario con el ejemplo a medio llenar y, si hay
+        tiempo, la alerta de «La restricción 1 está incompleta».
+      </p>
+
+      <h3>Bloque 2 · Pantalla 2, la tabla inicial <em>(Oscar)</em></h3>
+      <div class="guion">
+        “Pasamos el modelo a forma estándar sumando una variable de holgura por cada restricción
+        ≤. Con eso armamos la tabla inicial.”
+      </div>
+
+      <h3>Bloque 3 · Pantalla 3, las iteraciones <em>(Oscar y Alejandro)</em></h3>
+      <div class="guion">
+        <strong>Oscar:</strong> “Entra la variable con el coeficiente más negativo en Z y sale la
+        fila con la razón mínima. Aquí entra b y sale s2.”
+      </div>
+      <div class="guion">
+        <strong>Alejandro:</strong> “Luego hacemos las operaciones de fila y mostramos la tabla
+        nueva con su explicación. Repetimos hasta que no haya negativos en Z.”
+      </div>
+
+      <h3>Bloque 4 · Pantalla 4, el resultado <em>(Jonnathan)</em></h3>
+      <div class="guion">
+        “Al terminar mostramos Z = 36, a = 2 y b = 6, con su interpretación. Guardamos cada problema
+        y su solución en la base de datos para consultarlos después.”
+      </div>
+
+      <h3>Bloque 5 · Cierre <em>(Richard)</em></h3>
+      <div class="guion">
+        “La interfaz muestra cada tabla con el pivote resaltado y hay un manual de usuario. Todo
+        esto lo entregamos funcionando el 25 de octubre.”
+      </div>
+
+      <div class="aviso exito">
+        <span class="icono">✓</span>
+        <div>
+          <strong>Si sobra tiempo, muestra el módulo de transporte.</strong> Es la extensión que
+          más impresiona: una matriz de costos que se compila a un modelo de programación lineal y
+          se resuelve con el mismo simplex (costo 102 en el ejemplo de 2×2).
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. FICHA JHOSEF ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 4 · Ficha individual</div>
+      <h2>Jhosef Estefano Reyes Román</h2>
+
+      <div class="ficha">
+        <div class="ficha-cabecera">
+          <img src="equipo/jhosef.svg" alt="" />
+          <div class="datos">
+            <div class="nombre">Jhosef Estefano Reyes Román</div>
+            <div class="rol">
+              Captura y validación de datos · motor de cálculo y capa de la API
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-cuerpo">
+          <div class="etiqueta">Su parte, en una frase</div>
+          <p>
+            Construí la puerta de entrada del sistema: el formulario donde se declara el modelo,
+            la validación que lo acepta o lo rechaza con un mensaje claro, y el motor de cálculo
+            exacto sobre el que se apoya todo lo demás.
+          </p>
+
+          <div class="etiqueta">Qué debe saber</div>
+          <ul>
+            <li>
+              <strong>Por qué aritmética de fracciones y no punto flotante.</strong> Con
+              decimales, 0.1 + 0.2 = 0.30000000000000004; con fracciones el resultado es exacto.
+              El sistema usa <code>fraction.js</code> (BigInt) en <em>todas</em> las operaciones.
+            </li>
+            <li>
+              <strong>Las nueve reglas de validación</strong> y su mensaje: número de variables
+              entre 2 y 6, objetivo MAX/MIN, un coeficiente por variable en Z y en cada
+              restricción, valores numéricos finitos, signo ∈ {≤, ≥, =}, término independiente
+              presente y al menos una restricción.
+            </li>
+            <li>
+              <strong>La diferencia entre un error y un resultado.</strong> Un modelo mal formado
+              devuelve <strong>400</strong> con la lista de errores por campo; un modelo bien
+              formado pero sin solución óptima devuelve <strong>200</strong> con
+              <code>estado: INFACTIBLE</code> o <code>NO_ACOTADO</code>. Son cosas distintas.
+            </li>
+            <li>
+              <strong>El recorrido de un modelo</strong>: formulario → <code>modeloParaApi()</code>
+              → <code>POST /api/resolver</code> → respuesta con
+              <code>modelo</code>, <code>formaEstandar</code>, <code>tablaInicial</code>,
+              <code>iteraciones</code>, <code>tableauFinal</code> y <code>resultado</code> → los
+              cuatro pasos de la interfaz.
+            </li>
+            <li>
+              <strong>Por qué cada valor viaja como fracción y decimal</strong>: el decimal permite
+              mostrarlo redondeado; la fracción es la verdad. El frontend nunca recalcula: solo
+              reformatea.
+            </li>
+          </ul>
+
+          <div class="etiqueta">Archivos que domina</div>
+          <div class="chips">
+            <span class="chip">backend/src/utils/fraccion.js</span>
+            <span class="chip">backend/src/services/validarModelo.js</span>
+            <span class="chip">backend/src/services/simplex.js</span>
+            <span class="chip">backend/src/app.js</span>
+            <span class="chip">backend/src/middlewares/errores.js</span>
+            <span class="chip">frontend/src/steps/PasoIngreso.jsx</span>
+            <span class="chip">frontend/src/utils/modelo.js</span>
+          </div>
+
+          <div class="etiqueta">Su momento en la presentación</div>
+          <div class="guion">
+            “Aquí el usuario elige Max o Min, de 2 a 6 variables, y escribe los coeficientes y las
+            restricciones. Si falta un dato, el sistema muestra un error claro.”
+          </div>
+
+          <div class="etiqueta">Preguntas que le pueden hacer</div>
+          <div class="pregunta">
+            <div class="p">¿Por qué no usaron números decimales?</div>
+            <div class="r">
+              Porque el punto flotante acumula error y en una tabla simplex un 0.0000001 puede
+              cambiar qué solución se considera óptima. Con fracciones el cálculo es exacto y el
+              decimal es solo para mostrar.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué pasa si el usuario escribe un número con letra?</div>
+            <div class="r">
+              La validación lo rechaza con «no es un número válido» y le señala el campo exacto.
+              Si escribe un número como texto («3»), el backend lo acepta y lo convierte.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo sé que la validación del navegador y la del servidor coinciden?</div>
+            <div class="r">
+              Los mensajes están escritos una vez en el servidor y replicados en el cliente; las
+              pruebas del frontend comprueban que el cliente bloquea el envío y las del servidor que
+              devuelve el mismo texto.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué es un 500 y cuándo sale?</div>
+            <div class="r">
+              Es un error interno del servidor. Sale, por ejemplo, si el simplex superara el tope de
+              iteraciones. Devuelve un mensaje genérico en español y nunca filtra detalles técnicos.
+            </div>
+          </div>
+
+          <div class="etiqueta">Errores que no debe cometer</div>
+          <ul>
+            <li>No decir «Flask» ni «SQLite»: el backend es Express y MongoDB.</li>
+            <li>
+              No decir que los resultados están precargados: se calculan en el servidor cada vez.
+            </li>
+            <li>No prometer «cualquier número de variables»: el curso pide de 2 a 6.</li>
+          </ul>
+
+          <figure style="margin-top: 12px">
+            <img src="capturas/03-paso-1-modelo-lleno.png" alt="El formulario con el modelo completo" />
+            <figcaption>
+              Su pantalla: el formulario dinámico con la vista previa en vivo, que se actualiza con
+              cada tecla.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. FICHA OSCAR ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 5 · Ficha individual</div>
+      <h2>Oscar René Gonzalez Rojas</h2>
+
+      <div class="ficha">
+        <div class="ficha-cabecera">
+          <img src="equipo/oscar.svg" alt="" />
+          <div class="datos">
+            <div class="nombre">Oscar René Gonzalez Rojas</div>
+            <div class="rol">Forma estándar, tableau inicial y selección del pivote</div>
+          </div>
+        </div>
+
+        <div class="ficha-cuerpo">
+          <div class="etiqueta">Su parte, en una frase</div>
+          <p>
+            Escribí la traducción del modelo al tableau: la forma estándar con sus variables
+            agregadas, la tabla inicial y las dos decisiones que abren cada iteración, qué variable
+            entra y cuál sale.
+          </p>
+
+          <div class="etiqueta">Qué debe saber</div>
+          <ul>
+            <li>
+              <strong>La tabla de conversión a forma estándar.</strong>
+              <table style="margin: 6px 0 8px">
+                <thead>
+                  <tr>
+                    <th>Restricción</th>
+                    <th>Qué se agrega</th>
+                    <th>Restricción original</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="mono">≤</td>
+                    <td class="mono">+ sᵢ</td>
+                    <td class="mono">a₁x₁ + … ≤ bᵢ</td>
+                  </tr>
+                  <tr>
+                    <td class="mono">≥</td>
+                    <td class="mono">− eᵢ y + Aᵢ</td>
+                    <td class="mono">a₁x₁ + … ≥ bᵢ</td>
+                  </tr>
+                  <tr>
+                    <td class="mono">=</td>
+                    <td class="mono">+ Aᵢ</td>
+                    <td class="mono">a₁x₁ + … = bᵢ</td>
+                  </tr>
+                </tbody>
+              </table>
+              La holgura <span class="mono">sᵢ</span> es el sobrante; el exceso
+              <span class="mono">eᵢ</span> representa lo que sobra por encima del mínimo; la
+              artificial <span class="mono">Aᵢ</span> es un truco de la Fase 1 y no existe en el
+              problema original.
+            </li>
+            <li>
+              <strong>La fila Z.</strong> Se escribe como <span class="mono">Z − c₁x₁ − c₂x₂ − … =
+              0</span>. Cada entrada es el <em>costo reducido</em> de esa variable: cuánto mejora el
+              objetivo si esa variable entra en la base. Por eso el objetivo MAX es
+              <span class="mono">Z = 3a + 5b</span> y la fila Z es
+              <span class="mono">Z − 3a − 5b = 0</span>.
+            </li>
+            <li>
+              <strong>El criterio de optimalidad:</strong> la solución es óptima cuando
+              <em>todos</em> los coeficientes de la fila Z son ≥ 0. Si alguno es negativo, esa
+              variable puede mejorar el objetivo y hay que pivotear.
+            </li>
+            <li>
+              <strong>La variable entrante:</strong> la de coeficiente más negativo en la fila Z
+              (criterio de Dantzig). Los empates se resuelven por la columna más a la izquierda.
+            </li>
+            <li>
+              <strong>La prueba de razones:</strong> en la columna entrante, el cociente
+              término independiente entre coeficiente, <strong>solo si el coeficiente es
+              positivo</strong>. Si es ≤ 0 esa fila no limita y se marca «Sin razón: coeficiente ≤
+              0». Sale la fila con la <strong>menor razón</strong>; los empates, la fila más
+              arriba.
+            </li>
+          </ul>
+
+          <div class="etiqueta">Archivos que domina</div>
+          <div class="chips">
+            <span class="chip">backend/src/services/formaEstandar.js</span>
+            <span class="chip">backend/src/services/tabla.js</span>
+            <span class="chip">backend/src/services/pivoteo.js</span>
+            <span class="chip">variableEntrante()</span>
+            <span class="chip">calcularRazones()</span>
+            <span class="chip">variableSaliente()</span>
+            <span class="chip">backend/src/constants/dominio.js</span>
+          </div>
+
+          <div class="etiqueta">Sus momentos en la presentación</div>
+          <div class="guion">
+            <strong>Pantalla 2:</strong> “Pasamos el modelo a forma estándar sumando una variable
+            de holgura por cada restricción ≤. Con eso armamos la tabla inicial.”
+          </div>
+          <div class="guion">
+            <strong>Pantalla 3:</strong> “Entra la variable con el coeficiente más negativo en Z y
+            sale la fila con la razón mínima. Aquí entra b y sale s2.”
+          </div>
+
+          <div class="etiqueta">Preguntas que le pueden hacer</div>
+          <div class="pregunta">
+            <div class="p">¿Por qué una restricción ≥ necesita dos variables?</div>
+            <div class="r">
+              Para no perder la igualdad: con solo la holgura se cambiaría ≥ por ≤. Se agrega el
+              exceso (que toma el valor negativo de lo que sobra) y una artificial, que es la que
+              permite arrancar el algoritmo.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué es exactamente el costo reducido?</div>
+            <div class="r">
+              Es <span class="mono">Z<sub>j</sub> − c<sub>j</sub></span>: el cambio en el valor de
+              Z si esa variable entra en la base. Si es negativo, entrar mejora el objetivo.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Por qué la fila Z tiene los coeficientes en negativo?</div>
+            <div class="r">
+              Porque la fila se escribe como <span class="mono">Z − Σc<sub>j</sub>x<sub>j</sub> =
+              0</span>. Con el objetivo <span class="mono">Z = 3a + 5b</span> la fila queda
+              <span class="mono">−3, −5</span>.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué pasa si dos filas dan la misma razón mínima?</div>
+            <div class="r">
+              Sale la fila más arriba. Es un criterio documentado y además, a partir de la iteración
+              50, se aplica la regla de Bland para garantizar que el método termina.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo se detecta que el problema no está acotado?</div>
+            <div class="r">
+              Si la columna entrante no tiene ningún coeficiente positivo, no hay ninguna razón que
+              limite cuánto puede crecer esa variable: el objetivo se va al infinito.
+            </div>
+          </div>
+
+          <div class="etiqueta">Errores que no debe cometer</div>
+          <ul>
+            <li>
+              No decir que la artificial «es una holgura más»: es un artificio de cálculo que se
+              elimina en la Fase 1.
+            </li>
+            <li>No mezclar la convención de la fila Z: si dices «Z − 3a − 5b», mantén ese signo.</li>
+            <li>No afirmar que el tableau inicial ya es óptimo: casi nunca lo es.</li>
+          </ul>
+
+          <figure style="margin-top: 12px">
+            <img src="capturas/06-paso-3-iteracion-1.png" alt="La iteración 1 con la selección del pivote" />
+            <figcaption>
+              Su pantalla: la iteración 1 con las tarjetas de variable entrante, saliente y pivote, y
+              la prueba de razones.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. FICHA ALEJANDRO ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 6 · Ficha individual</div>
+      <h2>Alejandro Leiva Garcia</h2>
+
+      <div class="ficha">
+        <div class="ficha-cabecera">
+          <img src="equipo/alejandro.svg" alt="" />
+          <div class="datos">
+            <div class="nombre">Alejandro Leiva Garcia</div>
+            <div class="rol">Iteraciones, explicaciones y casos especiales</div>
+          </div>
+        </div>
+
+        <div class="ficha-cuerpo">
+          <div class="etiqueta">Su parte, en una frase</div>
+          <p>
+            Escribí el corazón del método: el pivoteo (las operaciones de fila que transforming la
+            tabla), el registro de cada iteración con su explicación en palabras, y la detección de
+            los cuatro casos que se salen del camino normal.
+          </p>
+
+          <div class="etiqueta">Qué debe saber</div>
+          <ul>
+            <li>
+              <strong>Las tres operaciones de una iteración:</strong>
+              <ol style="margin: 4px 0 6px">
+                <li>Normalizar la fila pivote: <span class="mono">F2 ← F2 / 2</span>.</li>
+                <li>
+                  Eliminar la columna pivote en las demás filas:
+                  <span class="mono">F3 ← F3 − 2·F2</span>.
+                </li>
+                <li>
+                  Eliminarla en la fila Z: <span class="mono">FZ ← FZ + 5·F2</span>.
+                </li>
+              </ol>
+              Tras el pivoteo, la columna del pivote queda con 1 en la fila pivote y 0 en el resto:
+              esa es la nueva base.
+            </li>
+            <li>
+              <strong>Qué se guarda de cada iteración</strong> y por qué: número, fase, tabla
+              antes y después, variable entrante con su motivo, la prueba de razones completa, la
+              saliente, el elemento pivote, las operaciones de fila y una explicación en lenguaje
+              natural. Con eso la interfaz puede reconstruir el procedimiento entero.
+            </li>
+            <li>
+              <strong>Los casos especiales:</strong>
+              <table style="margin: 6px 0 8px">
+                <thead>
+                  <tr>
+                    <th>Caso</th>
+                    <th>Cómo se detecta</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>No acotado</td>
+                    <td>La columna entrante no tiene ningún coeficiente positivo.</td>
+                  </tr>
+                  <tr>
+                    <td>Infactible</td>
+                    <td>La Fase 1 termina con W &gt; 0 (hay artificiales con valor positivo).</td>
+                  </tr>
+                  <tr>
+                    <td>Degeneración</td>
+                    <td>La razón mínima sale 0: se pivota pero la solución no cambia.</td>
+                  </tr>
+                  <tr>
+                    <td>Soluciones múltiples</td>
+                    <td>
+                      Una variable no básica con costo reducido 0 y razón mínima mayor que 0:
+                      existe otra solución óptima distinta.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <strong>El ciclo de dos fases:</strong> en la Fase 1 el objetivo es
+              <span class="mono">W = Σ Aᵢ</span> (minimizar la suma de las artificiales). Si al
+              terminar W = 0, el problema es factible y se pasa a la Fase 2 con el objetivo
+              original. Si W &gt; 0, las restricciones son contradictorias.
+            </li>
+            <li>
+              <strong>La protección contra ciclos:</strong> la regla de Bland (elegir siempre la
+              primera columna con costo reducido negativo) garantiza la terminación; se activa a
+              partir de la iteración 50 y hay además un tope de 100 iteraciones.
+            </li>
+          </ul>
+
+          <div class="etiqueta">Archivos que domina</div>
+          <div class="chips">
+            <span class="chip">backend/src/services/pivoteo.js</span>
+            <span class="chip">pivotear()</span>
+            <span class="chip">backend/src/services/simplex.js</span>
+            <span class="chip">backend/src/services/dosFases.js</span>
+            <span class="chip">test/casosLimite.test.js</span>
+            <span class="chip">test/solucionesMultiples.test.js</span>
+            <span class="chip">test/dosFases.test.js</span>
+          </div>
+
+          <div class="etiqueta">Su momento en la presentación</div>
+          <div class="guion">
+            “Luego hacemos las operaciones de fila y mostramos la tabla nueva con su explicación.
+            Repetimos hasta que no haya negativos en Z.”
+          </div>
+
+          <div class="etiqueta">Preguntas que le pueden hacer</div>
+          <div class="pregunta">
+            <div class="p">¿Qué es la degeneración?</div>
+            <div class="r">
+              Que en la iteración actual hay una variable básica con valor cero. La razón mínima
+              sale 0: se puede pivotear, pero se llega al mismo punto. No es un error, pero sí es
+              la señal de que puede haber problemas después, y por eso se documenta el criterio de
+              desempate.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo se detecta el problema infactible?</div>
+            <div class="r">
+              En la Fase 1, el objetivo es minimizar <span class="mono">W = Σ Aᵢ</span>. Si al
+              terminar W es mayor que cero, alguna artificial sigue valiendo positivo, y eso
+              significa que no hay forma de satisfacer todas las restricciones a la vez.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cuándo hay soluciones óptimas múltiples?</div>
+            <div class="r">
+              Cuando en la tabla final hay una variable no básica con costo reducido 0 y la
+              prueba de razones da un límite positivo: al pivotear se obtiene otra solución con el
+              mismo Z. En el sistema se avisa con una alerta amarilla.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué pasa si el algoritmo no converge?</div>
+            <div class="r">
+              A partir de la iteración 50 se aplica la regla de Bland, que garantiza la
+              terminación. Además hay un tope duro de 100 iteraciones: si se superara, el servidor
+              devolvería un error 500 con un mensaje claro, nunca un resultado inventado.
+            </div>
+          </div>
+
+          <div class="etiqueta">Errores que no debe cometer</div>
+          <ul>
+            <li>No decir «cuando no haya negativos en Z» sin aclarar que es en la <em>fila</em> Z.</li>
+            <li>
+              No confundir degeneración con soluciones múltiples: una es una variable básica en
+              cero; la otra son varias soluciones óptimas distintas.
+            </li>
+            <li>No prometer que todos los casos se detectan en la primera iteración.</li>
+          </ul>
+
+          <figure style="margin-top: 12px">
+            <img src="capturas/20-alejandro-no-acotado.png" alt="Detección del problema no acotado" />
+            <figcaption>
+              Su caso especial: cuando la columna entrante no tiene ninguna razón válida, el
+              sistema lo explica en lugar de devolver un número falso.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="capturas/22-alejandro-multiples.png" alt="Detección de soluciones múltiples" />
+            <figcaption>
+              Otro de sus casos: cuando el óptimo no es único, el sistema lo avisa y explica qué
+              variables pueden moverse sin cambiar Z.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. FICHA JONNATHAN ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 7 · Ficha individual</div>
+      <h2>Jonnathan Giovanni Tiul Ramirez</h2>
+
+      <div class="ficha">
+        <div class="ficha-cabecera">
+          <img src="equipo/jonnathan.svg" alt="" />
+          <div class="datos">
+            <div class="nombre">Jonnathan Giovanni Tiul Ramirez</div>
+            <div class="rol">
+              Max/Min, interpretación de la solución y la base de datos (con la autenticación)
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-cuerpo">
+          <div class="etiqueta">Su parte, en una frase</div>
+          <p>
+            Hice que el sistema sepa minimizar y que su resultado se pueda leer y guardar: la
+            conversión de minimizar a maximizar, la interpretación de la solución con su análisis
+            económico, y toda la capa de datos con cuentas, historial y autenticación.
+          </p>
+
+          <div class="etiqueta">Qué debe saber</div>
+          <ul>
+            <li>
+              <strong>Por qué minimizar se resuelve maximizando.</strong> Todo el criterio de
+              optimalidad y el pivoteo están pensados para maximizar. Para minimizar
+              <span class="mono">Z</span> se resuelve el problema auxiliar
+              <span class="mono">MAX (−Z)</span>, que en la tabla se rotula
+              <span class="mono">Z′</span>; al final se revierte el signo para presentar el valor
+              real de <span class="mono">Z</span>. Así hay un solo algoritmo y no dos.
+            </li>
+            <li>
+              <strong>El precio sombra.</strong> Es la derivada del valor óptimo respecto al
+              término independiente: <span class="mono">∂Z/∂bᵢ</span>. En el ejemplo, el precio
+              sombra de la restricción 2 es 1.5: si su término independiente pasa de 12 a 13, el
+              óptimo pasa de 36 a 37.5. Si es 0, esa restricción no está limitando nada.
+            </li>
+            <li>
+              <strong>El modelo de datos.</strong> Una sola colección, <code>modelos</code>, con
+              el modelo <em>y</em> su resolución embebida en el mismo documento. Así al reabrir un
+              modelo guardado se recupera todo el procedimiento sin recalcular nada. La segunda
+              colección, <code>usuarios</code>, guarda las cuentas.
+            </li>
+            <li>
+              <strong>El aislamiento entre cuentas.</strong> Cada modelo guarda su
+              <code>usuarioId</code>; la lista devuelve los del usuario más los ejemplos públicos
+              (los del seed), y solo el dueño puede modificar o borrar los suyos.
+            </li>
+            <li>
+              <strong>La autenticación.</strong> La contraseña nunca se guarda: se cifra con
+              <strong>bcrypt</strong>, que genera una sal aleatoria por usuario. El token de
+              sesión es un <strong>JWT</strong> firmado que solo lleva el identificador y el
+              correo, y viaja en la cabecera <span class="mono">Authorization: Bearer</span>.
+            </li>
+            <li>
+              <strong>El script de carga inicial</strong> (<span class="mono">npm run seed</span>)
+              limpia la colección y vuelve a insertar tres modelos de ejemplo: uno de
+              maximización, uno de minimización (que fuerza las dos fases) y uno de seis
+              variables. Se puede correr las veces que haga falta.
+            </li>
+          </ul>
+
+          <div class="etiqueta">Archivos que domina</div>
+          <div class="chips">
+            <span class="chip">backend/src/models/Modelo.js</span>
+            <span class="chip">backend/src/models/Usuario.js</span>
+            <span class="chip">backend/src/services/auth.service.js</span>
+            <span class="chip">backend/src/controllers/modelos.controller.js</span>
+            <span class="chip">backend/src/utils/password.js</span>
+            <span class="chip">backend/src/utils/token.js</span>
+            <span class="chip">backend/seed/seed.js</span>
+            <span class="chip">backend/src/config/db.js</span>
+          </div>
+
+          <div class="etiqueta">Su momento en la presentación</div>
+          <div class="guion">
+            “Al terminar mostramos Z = 36, a = 2 y b = 6, con su interpretación. Guardamos cada
+            problema y su solución en la base de datos para consultarlos después.”
+          </div>
+
+          <div class="etiqueta">Preguntas que le pueden hacer</div>
+          <div class="pregunta">
+            <div class="p">¿Por qué no hicieron un método aparte para minimizar?</div>
+            <div class="r">
+              Porque duplicaría el código y multiplicaría los errores. Con la conversión a
+              <span class="mono">MAX (−Z)</span> hay un solo criterio de optimalidad, un solo
+              pivoteo y un solo conjunto de casos especiales. El cambio de signo está aislado en
+              dos puntos: al construir la fila Z y al presentar el resultado.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué es un precio sombra y para qué sirve?</div>
+            <div class="r">
+              Es cuánto cambia el valor óptimo de Z si el término independiente de esa
+              restricción aumenta en una unidad. Sirve para decidir si vale la pena ampliar un
+              recurso: si el precio es 0, la restricción no está limitando y no aporta nada
+              cheaply.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Por qué guardar la resolución dentro del mismo documento?</div>
+            <div class="r">
+              Para que al reabrir un modelo guardado se vea el procedimiento entero sin volver a
+              calcularlo, y para que el historial se lea con una sola consulta. El modelo es
+              jerárquico por naturaleza: restricciones, iteraciones y tablas encajan bien en un
+              documento.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo se protege la contraseña?</div>
+            <div class="r">
+              Con bcrypt, que es un hash con sal: la contraseña nunca se guarda y tampoco se puede
+              recuperar, solo comparar. Además el token de sesión lleva solo el identificador y el
+              correo, nunca la contraseña.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué pasa si un usuario intenta ver el modelo de otro?</div>
+            <div class="r">
+              El servidor responde 403 y no devuelve el documento. El filtrado se hace en la
+              consulta, no en el frontend.
+            </div>
+          </div>
+
+          <div class="etiqueta">Errores que no debe cometer</div>
+          <ul>
+            <li>No decir «SQLite»: la base de datos es MongoDB.</li>
+            <li>
+              No prometer recuperación de contraseña por correo: no hay servidor de correo, el token
+              se muestra en pantalla.
+            </li>
+            <li>
+              No decir que la contraseña se guarda «cifrada»: se guarda <em>cifrada con
+              hash</em> (bcrypt), que es una diferencia importante.
+            </li>
+          </ul>
+
+          <figure style="margin-top: 12px">
+            <img src="capturas/24-jonnathan-precios-sombra.png" alt="El resultado con los precios sombra" />
+            <figcaption>
+              Su análisis: además del valor óptimo, el sistema explica cuánto vale cada
+              restricción y por qué.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="capturas/26-jonnathan-modelos-guardados.png" alt="Los modelos guardados del usuario" />
+            <figcaption>
+              Su base de datos: cada modelo se guarda con su resolución completa y se puede reabrir
+              sin recalcular.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 8. FICHA RICHARD ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 8 · Ficha individual</div>
+      <h2>Richard Emanuel Apolonio Ramirez Mazariegos</h2>
+
+      <div class="ficha">
+        <div class="ficha-cabecera">
+          <img src="equipo/richard.svg" alt="" />
+          <div class="datos">
+            <div class="nombre">Richard Emanuel Apolonio Ramirez Mazariegos</div>
+            <div class="rol">Interfaz, plan de pruebas y manual de usuario</div>
+          </div>
+        </div>
+
+        <div class="ficha-cuerpo">
+          <div class="etiqueta">Su parte, en una frase</div>
+          <p>
+            Construí la interfaz: los cuatro pasos, las tablas del simplex con el pivote
+            resaltado y la navegación entre iteraciones. Y el plan de pruebas y el manual que
+            explican cómo se usa y cómo se verificó el sistema.
+          </p>
+
+          <div class="etiqueta">Qué debe saber</div>
+          <ul>
+            <li>
+              <strong>El sistema de diseño.</strong> Los tokens viven una sola vez en
+              <code>styles/tokens.css</code> y Tailwind los expone como utilidades. La paleta
+              está fijada: fondo <span class="mono">#F8FAFC</span>, superficies blancas, azul
+              <span class="mono">#2563EB</span> para las acciones, bordes
+              <span class="mono">#E2E8F0</span>. Verde, ámbar y rojo son <em>semánticos</em>, no
+              decorativos, y el color nunca va solo: siempre con texto o icono.
+            </li>
+            <li>
+              <strong>El resaltado del pivote.</strong> La fila y la columna del pivote se pintan
+              en azul muy suave y la celda del pivote lleva además un borde. La fila de la variable
+              saliente se marca en ámbar. Sirve para ver de un vistazo qué está pivoteando.
+            </li>
+            <li>
+              <strong>Cómo se dibuja una tabla del simplex.</strong> Una columna por variable
+              (más la del término independiente), una fila por restricción con su variable básica
+              a la izquierda y la fila Z al final. Los números van en monoespaciada y alineados a
+              la derecha.
+            </li>
+            <li>
+              <strong>La precisión decimal no recalcula.</strong> El backend manda cada valor
+              como fracción exacta y como decimal; el selector de precisión vuelve a calcular el
+              decimal desde la fracción, con la misma regla de redondeo que el servidor. Cambiar
+              los decimales no toca el modelo.
+            </li>
+            <li>
+              <strong>El plan de pruebas.</strong> Tres capas:
+              <strong>279 pruebas del backend</strong> (unitarias y de integración contra un
+              MongoDB real), <strong>41 del frontend</strong> (componentes con Testing Library) y
+              <strong>27 comprobaciones en un navegador real</strong>, que además dejan las
+              capturas del manual. La validación matemática del solver se hizo además contra un
+              barrido de vértices del poliedro con 1200 modelos aleatorios.
+            </li>
+          </ul>
+
+          <div class="etiqueta">Archivos que domina</div>
+          <div class="chips">
+            <span class="chip">frontend/src/steps/PasoPivoteo.jsx</span>
+            <span class="chip">frontend/src/components/TablaSimplex.jsx</span>
+            <span class="chip">frontend/src/components/EditorTransporte.jsx</span>
+            <span class="chip">frontend/src/layout/Sidebar.jsx</span>
+            <span class="chip">frontend/src/styles/tokens.css</span>
+            <span class="chip">frontend/scripts/capturas.mjs</span>
+            <span class="chip">frontend/test/</span>
+          </div>
+
+          <div class="etiqueta">Su momento en la presentación</div>
+          <div class="guion">
+            “La interfaz muestra cada tabla con el pivote resaltado y hay un manual de usuario. Todo
+            esto lo entregamos funcionando el 25 de octubre.”
+          </div>
+
+          <div class="etiqueta">Preguntas que le pueden hacer</div>
+          <div class="pregunta">
+            <div class="p">¿Cómo se hace el resaltado del pivote?</div>
+            <div class="r">
+              Con clases condicionales por fila, columna y celda en el componente de la tabla. La
+              columna y la fila del pivote reciben el azul suave y la celda, además, un borde: se
+              distingue el pivote exacto sin gritar.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo cambia la precisión decimal?</div>
+            <div class="r">
+              El backend devuelve cada valor como fracción exacta y como decimal. Al cambiar el
+              selector se vuelve a calcular el decimal desde la fracción, con la misma regla de
+              redondeo que usa el servidor (punto medio hacia afuera del cero). No se recalcula el
+              modelo.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué pruebas tiene el sistema?</div>
+            <div class="r">
+              279 del backend y 41 del frontend, más 27 comprobaciones sobre un navegador real que
+              recorren las cuatro pantallas y el módulo de transporte. Además, el solver se validó
+              de forma independiente contra un barrido de vértices del poliedro con 1200 modelos
+              aleatorios, y los precios sombra se compararon a mano con el dual del problema.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Cómo se regeneran las capturas del manual?</div>
+            <div class="r">
+              Con <span class="mono">npm run capturas</span>: un script que abre la aplicación en
+              un navegador real, comprueba que cada pantalla muestre lo que debe y deja las
+              capturas. El PDF se regenera con <span class="mono">npm run manual</span>.
+            </div>
+          </div>
+          <div class="pregunta">
+            <div class="p">¿Qué se ve en la tabla?</div>
+            <div class="r">
+              En cada columna, la variable; en cada fila, su valor. La fila Z al final muestra el
+              costo reducido de cada columna y el valor actual del objetivo. El término
+              independiente va en la última columna.
+            </div>
+          </div>
+
+          <div class="etiqueta">Errores que no debe cometer</div>
+          <ul>
+            <li>No decir que los resultados son «de ejemplo»: son el cálculo real de cada modelo.</li>
+            <li>
+              No prometer un despliegue en la nube: la entrega es local, con el backend y el
+              frontend corriendo en la máquina.
+            </li>
+            <li>No describir el color como la única señal de estado: siempre va con texto.</li>
+          </ul>
+
+          <figure style="margin-top: 12px">
+            <img src="capturas/07-paso-4-resultado.png" alt="La pantalla de resultado final" />
+            <figcaption>
+              Su pantalla: el resultado final con las métricas, la verificación de restricciones y
+              el análisis.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="capturas/09-transporte-plan.png" alt="El plan de envío del módulo de transporte" />
+            <figcaption>
+              La extensión que construyó: el módulo de transporte, con la matriz de costos y el
+              plan de envío que sale del mismo simplex.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 9. ANEXO TÉCNICO ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 9 · Anexo</div>
+      <h2>Anexo técnico</h2>
+
+      <h3>Convenciones del solver</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Tema</th>
+            <th>Decisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Aritmética</td>
+            <td>Fracciones exactas (<code>fraction.js</code>, BigInt). Cero error de punto flotante.</td>
+          </tr>
+          <tr>
+            <td>Fila Z</td>
+            <td>Se escribe <span class="mono">Z − Σc<sub>j</sub>x<sub>j</sub> = 0</span>; sus entradas son los costos reducidos.</td>
+          </tr>
+          <tr>
+            <td>Optimalidad</td>
+            <td>Todos los coeficientes de la fila Z ≥ 0.</td>
+          </tr>
+          <tr>
+            <td>Variable entrante</td>
+            <td>Coeficiente más negativo; empate por la columna más a la izquierda.</td>
+          </tr>
+          <tr>
+            <td>Prueba de razones</td>
+            <td>Solo con coeficiente positivo; sale la menor razón; empate por la fila más arriba.</td>
+          </tr>
+          <tr>
+            <td>Minimización</td>
+            <td>Se maximiza <span class="mono">Z′ = −Z</span> y se revierte el signo al presentar.</td>
+          </tr>
+          <tr>
+            <td>Dos fases</td>
+            <td>Fase 1 con <span class="mono">W = Σ Aᵢ</span>; W = 0 para pasar a la Fase 2; W &gt; 0 es infactible.</td>
+          </tr>
+          <tr>
+            <td>Anti-ciclos</td>
+            <td>Regla de Bland desde la iteración 50 y tope de 100 iteraciones.</td>
+          </tr>
+          <tr>
+            <td>Precios sombra</td>
+            <td><span class="mono">y<sub>i</sub> = Σ<sub>r</sub> c<sub>B(r)</sub>·(B⁻¹)<sub>ri</sub></span>, leídos de la tabla final.</td>
+          </tr>
+          <tr>
+            <td>Precisión</td>
+            <td>Exacto siempre; el decimal se redondea solo para mostrarlo.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>La API</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 34%">Ruta</th>
+            <th style="width: 14%">Método</th>
+            <th>Qué hace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">/api/resolver</td>
+            <td>POST</td>
+            <td>Resuelve el modelo y devuelve todo el procedimiento. Público.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/health</td>
+            <td>GET</td>
+            <td>Estado del servicio y de la base de datos.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/auth/register</td>
+            <td>POST</td>
+            <td>Crea la cuenta y devuelve un JWT.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/auth/login</td>
+            <td>POST</td>
+            <td>Inicia sesión y devuelve un JWT.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/auth/forgot-password</td>
+            <td>POST</td>
+            <td>Genera el token de recuperación (sin correo: se devuelve en la respuesta).</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/auth/reset-password</td>
+            <td>POST</td>
+            <td>Consume el token y cambia la contraseña.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/auth/yo</td>
+            <td>GET</td>
+            <td>Perfil de la sesión.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/modelos</td>
+            <td>GET · POST</td>
+            <td>Lista el historial del usuario; guarda un modelo con su resolución. Con sesión.</td>
+          </tr>
+          <tr>
+            <td class="mono">/api/modelos/:id</td>
+            <td>GET · PUT · DELETE</td>
+            <td>Detalle, edición y borrado. Solo el dueño.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>La base de datos</h3>
+      <pre><code>usuarios
+  _id, nombre, email (único), password (bcrypt),
+  tokenRecuperacion, expiraTokenRecuperacion, creadoEn, actualizadoEn
+
+modelos
+  _id, nombre, objetivo, numVariables, coeficientesZ, restricciones[]
+  usuarioId  → dueño (null = ejemplo público)
+  resolucion {
+    estado, mensaje, modelo, formaEstandar, tablaInicial,
+    iteraciones[], tableauFinal, resultado, resueltoEn
+  }
+  creadoEn, actualizadoEn</code></pre>
+    </section>
+
+    <!-- ==================== 10. EQUIVALENCIAS ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 10 · Anexo</div>
+      <h2>Equivalencias con Python</h2>
+
+      <p>
+        Si alguien pregunta por Flask o por SQLite, esta es la respuesta. La lógica matemática —la
+        forma estándar, la selección del pivote, el pivoteo, las dos fases— es la misma; lo que
+        cambia es el lenguaje y la base de datos.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%">Flask (Python)</th>
+            <th>Express (Node.js) — lo que usamos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">@app.route('/api/resolver', methods=['POST'])</td>
+            <td class="mono">router.post('/', resolverController)</td>
+          </tr>
+          <tr>
+            <td class="mono">request.get_json()</td>
+            <td class="mono">req.body</td>
+          </tr>
+          <tr>
+            <td class="mono">jsonify({...})</td>
+            <td class="mono">res.json({...})</td>
+          </tr>
+          <tr>
+            <td class="mono">Blueprint</td>
+            <td class="mono">Router</td>
+          </tr>
+          <tr>
+            <td class="mono">flask-jwt-extended</td>
+            <td class="mono">jsonwebtoken</td>
+          </tr>
+          <tr>
+            <td class="mono">werkzeug.security.generate_password_hash</td>
+            <td class="mono">bcryptjs</td>
+          </tr>
+          <tr>
+            <td class="mono">fractions.Fraction</td>
+            <td class="mono">fraction.js</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%">SQLite (SQL)</th>
+            <th>MongoDB con Mongoose — lo que usamos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">CREATE TABLE modelos (...)</td>
+            <td class="mono">new Schema({...})</td>
+          </tr>
+          <tr>
+            <td class="mono">INSERT INTO modelos ...</td>
+            <td class="mono">Modelo.create({...})</td>
+          </tr>
+          <tr>
+            <td class="mono">SELECT * FROM modelos WHERE usuario_id = ?</td>
+            <td class="mono">Modelo.find({ usuarioId: ... })</td>
+          </tr>
+          <tr>
+            <td class="mono">json_extract(resolucion, '$.z')</td>
+            <td>Un documento embebido: se lee sin analizar JSON.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="aviso info">
+        <span class="icono">ℹ</span>
+        <div>
+          <strong>Por qué Node.js y Express.</strong> Es el ecosistema que el enunciado pide para
+          el servidor (<em>MERN</em>: MongoDB, Express, React, Node). El enunciado no pedía un
+          lenguaje concreto para la API: pedía MERN, y por eso el backend es Express y la base
+          MongoDB.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 11. USO DE IA ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 11 · Anexo</div>
+      <h2>Uso de herramientas de IA</h2>
+
+      <p>
+        El enunciado pide indicar brevemente qué herramientas de IA se usaron y para qué. Esta es
+        la declaración del equipo:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Herramienta</th>
+            <th>Para qué se usó</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Asistentes de código con contexto (IA conversacional)</td>
+            <td>
+              Para arrancar el proyecto, escribir el motor del simplex a partir de la
+              especificación matemática del enunciado, generar el esqueleto de las pruebas
+              unitarias y la interfaz, y redactar este manual y el manual de usuario.
+            </td>
+          </tr>
+          <tr>
+            <td>Generación de código (plantillas y utilidades)</td>
+            <td>
+              Para el andamiaje de los componentes de la interfaz, los scripts de captura de
+              pantalla y el generador del PDF.
+            </td>
+          </tr>
+          <tr>
+            <td>Revisión y redacción</td>
+            <td>
+              Para la documentación técnica (README, convenciones) y la preparación de la
+              presentación.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Lo que NO se dejó en manos de la IA</h3>
+      <ul>
+        <li>
+          <strong>La validación matemática.</strong> El solver se contrastó de forma independiente
+          contra un barrido de vértices del poliedro con <strong>1200 modelos aleatorios</strong>
+          (maximizar y minimizar, con restricciones ≤, ≥ y =): cero discrepancias en el valor
+          óptimo, en la detección de infactibilidad y en la de no acotado.
+        </li>
+        <li>
+          <strong>Los precios sombra</strong> se compararon a mano con el dual del problema de
+          referencia: 0, 3/2 y 1.
+        </li>
+        <li>
+          <strong>Las decisiones de diseño y de alcance</strong> (el módulo de transporte, la
+          autenticación, el tratamiento de las soluciones múltiples) se tomaron y documentaron en
+          el equipo.
+        </li>
+        <li>
+          <strong>El sistema de diseño</strong> es el que entrega el enunciado y se respetó sin
+          desviaciones.
+        </li>
+      </ul>
+
+      <div class="aviso aviso">
+        <span class="icono">⚠</span>
+        <div>
+          <strong>Cómo responderlo si preguntan.</strong> La IA se usó como herramienta de
+          desarrollo, igual que un framework o un autocomplete: lamathemática se verificó de forma
+          independiente y cada integrante es responsable de explicar su parte. En la entrega se
+          puede enseñar la validación por fuerza bruta, que es lo que da confianza en el
+          resultado.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 12. FAQ ==================== -->
+    <section class="seccion">
+      <div class="eyebrow">Sección 12</div>
+      <h2>Preguntas frecuentes</h2>
+
+      <h3>¿El resultado está precargado?</h3>
+      <p>
+        No. Cada número que aparece lo calculó el servidor ejecutando el simplex sobre el modelo
+        que se escribió, con aritmética exacta de fracciones.
+      </p>
+
+      <h3>¿Cuántas variables acepta?</h3>
+      <p>
+        De 2 a 6, con los nombres <span class="mono">a</span> a
+        <span class="mono">f</span>, como pide el enunciado. El módulo de transporte es la
+        excepción: envía sus propios nombres <span class="mono">xᵢⱼ</span> y puede llegar a 60
+        variables.
+      </p>
+
+      <h3>¿Qué pasa si el problema no tiene solución?</h3>
+      <p>
+        Si es <strong>infactible</strong> o <strong>no acotado</strong>, la aplicación lo indica
+        con una alerta y una explicación, y deja las iteraciones realizadas para poder ver el
+        procedimiento.
+      </p>
+
+      <h3>¿Se puede volver atrás sin perder lo escrito?</h3>
+      <p>
+        Sí. El modelo se conserva al cambiar de paso; solo se descarta con «Reiniciar» o «Nuevo
+        modelo», y en ese caso la aplicación pide confirmación.
+      </p>
+
+      <h3>¿Hace falta internet para usarlo?</h3>
+      <p>
+        No, si todo corre en la misma máquina: Node.js, MongoDB, el backend y el frontend. Solo se
+        necesita internet para instalar las dependencias la primera vez.
+      </p>
+
+      <h3>¿Cuánto tarda en resolverse un modelo?</h3>
+      <p>
+        Menos de un segundo: son operaciones racionales sobre tablas pequeñas. Los 279 casos de
+        prueba del backend, incluidos los 1200 de la validación por fuerza bruta, se ejecutan en
+        pocos minutos.
+      </p>
+
+      <div class="pie">
+        Linear Studio · Manual del equipo y guía de presentación · Investigación de Operaciones —
+        Universidad Mariano Gálvez de Guatemala · Octubre de 2026
+      </div>
+    </section>
+  </body>
+</html>

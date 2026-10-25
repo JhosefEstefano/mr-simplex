@@ -1,8 +1,9 @@
 /**
- * Genera el PDF del manual de usuario a partir de `manual.html`.
+ * Genera un PDF a partir de un manual HTML.
  *
  * Uso (desde la raíz de `frontend/`):
- *   node scripts/generar-pdf.mjs
+ *   node scripts/generar-pdf.mjs documentacion/manual-equipo.html
+ *   node scripts/generar-pdf.mjs documentacion/manual.html
  */
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'node:url';
@@ -10,9 +11,12 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DOCUMENTACION = path.join(RAIZ, 'documentacion');
-const ORIGEN = `file:///${path.join(DOCUMENTACION, 'manual.html').replace(/\\/g, '/')}`;
-const DESTINO = path.join(DOCUMENTACION, 'manual-linear-studio.pdf');
+
+const RELATIVO = process.argv[2] ?? 'documentacion/manual.html';
+const ORIGEN_ABSOLUTO = path.resolve(RAIZ, RELATIVO);
+const ORIGEN = `file:///${ORIGEN_ABSOLUTO.replace(/\\/g, '/')}`;
+const NOMBRE = path.basename(RELATIVO, '.html');
+const DESTINO = path.join(path.dirname(ORIGEN_ABSOLUTO), `${NOMBRE}.pdf`);
 
 // 'msedge' usa el Edge ya instalado; en Linux basta con BROWSER_CHANNEL=chromium
 // (previa instalación de los binarios con `npx playwright install chromium`).
@@ -37,13 +41,13 @@ await pagina.pdf({
   path: DESTINO,
   format: 'A4',
   printBackground: true,
-  margin: { top: '18mm', bottom: '16mm', left: '16mm', right: '16mm' },
+  margin: { top: '17mm', bottom: '15mm', left: '15mm', right: '15mm' },
   displayHeaderFooter: true,
   headerTemplate: '<div></div>',
   footerTemplate: `
-    <div style="width:100%;font-size:8px;color:#94A3B8;padding:0 16mm;
+    <div style="width:100%;font-size:8px;color:#94A3B8;padding:0 15mm;
                 font-family:Inter,Segoe UI,sans-serif;display:flex;justify-content:space-between;">
-      <span>Linear Studio · Manual de usuario</span>
+      <span>Linear Studio · Manual del equipo</span>
       <span class="pageNumber"></span>
     </div>`
 });

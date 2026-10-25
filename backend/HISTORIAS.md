@@ -129,3 +129,12 @@ Convención: `BE-<épica>.<n>`.
 
 - [x] **DO-1** README del backend con los endpoints de autenticación, las variables extendidas y los precios sombra.
 - [x] **DO-2** `contexto_actualizado_del_proyecto.md` reconciliado con el estado real del código.
+- [x] **DO-3** Detección de soluciones óptimas múltiples (el último hueco de la división original).
+
+## Épica 14 — Documentación y guía de presentación
+
+- [x] **DP-1** Manual de usuario en PDF con las capturas de las cuatro pantallas.
+- [x] **DP-2** Manual del equipo: reparto de responsabilidades, qué debe saber cada uno, guion de la presentación, preguntas frecuentes y errores que no debe cometer.
+- [x] **DP-3** Guion de presentación corregido al stack real (Node.js + Express + MongoDB).
+- [x] **DP-4** Anexo de equivalencias Express↔Flask y MongoDB↔SQLite para las preguntas de la defensa.
+- [x] **DP-5** Declaración del uso de herramientas de IA, como pide el enunciado.

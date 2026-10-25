@@ -139,18 +139,26 @@ respuesta real del solver.
 
 ## 11. Documentación y capturas
 
-En `documentacion/` está el **manual de usuario** y las capturas que lo ilustran:
+En `documentacion/` están los dos manuales y las capturas que los ilustran:
 
-- `documentacion/manual-linear-studio.pdf` — manual listo para entregar (10 secciones, 11 figuras).
-- `documentacion/manual.html` — la fuente del PDF, por si se quiere editarlo.
-- `documentacion/capturas/` — las once capturas reales de la aplicación.
+- `documentacion/manual-equipo.pdf` — **manual del equipo**: qué le toca a cada integrante, qué
+  debe saber, su guion de la presentación, las preguntas que le pueden hacer y los errores que
+  no debe cometer (12 secciones, una ficha por persona).
+- `documentacion/manual.pdf` — **manual de usuario**: cómo se usa el sistema paso a paso
+  (10 secciones).
+- `documentacion/manual-equipo.html` y `documentacion/manual.html` — las fuentes editables.
+- `documentacion/capturas/` — las diecinueve capturas reales de la aplicación.
+- `documentacion/equipo/` — los avatares del equipo.
 
 Las capturas no son dibujos: se toman **pilotando el navegador de verdad**, con lo que el script
 además comprueba que cada pantalla muestre lo que debe:
 
 ```bash
-npm run capturas   # recorre la app con Edge, comprueba y captura
-npm run manual     # genera el PDF a partir de manual.html
+npm run capturas   # recorre la app con Edge, comprueba y captura (27 comprobaciones)
+npm run manual     # genera el PDF del manual de usuario
+
+# El manual del equipo se genera pasando el HTML como argumento:
+node scripts/generar-pdf.mjs documentacion/manual-equipo.html
 ```
 
 > El script usa el Edge instalado (`BROWSER_CHANNEL=msedge`, el valor por defecto). En Linux:
