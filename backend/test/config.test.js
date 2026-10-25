@@ -1,9 +1,9 @@
+import { uriDePruebas } from './helpers/baseDeDatos.js';
 import { describe, it, expect } from 'vitest';
 import mongoose from 'mongoose';
 import { conectarMongo, desconectarMongo, estadoDeConexion } from '../src/config/db.js';
 
-const URI_PRUEBAS =
-  process.env.MONGODB_URI_TEST ?? 'mongodb://127.0.0.1:27017/linear-studio-pruebas';
+const URI_PRUEBAS = uriDePruebas('config');
 
 describe('configuración de base de datos', () => {
   it('falla con un mensaje claro si falta la URI', async () => {

@@ -1,11 +1,11 @@
+import { uriDePruebas, hayMongo } from './helpers/baseDeDatos.js';
 import { describe, it, expect, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import { crearApp } from '../src/app.js';
 import { Modelo } from '../src/models/Modelo.js';
 
-const URI_PRUEBAS =
-  process.env.MONGODB_URI_TEST ?? 'mongodb://127.0.0.1:27017/linear-studio-pruebas';
+const URI_PRUEBAS = uriDePruebas('persistencia');
 
 const app = crearApp();
 
@@ -33,17 +33,7 @@ const MODELO_MIN = {
   ]
 };
 
-/** Comprueba si hay un MongoDB disponible para las pruebas. */
-async function hayMongo() {
-  try {
-    await mongoose.connect(URI_PRUEBAS, { serverSelectionTimeoutMS: 3000 });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-const disponible = await hayMongo();
+const disponible = await hayMongo(URI_PRUEBAS);
 
 if (disponible) {
   beforeEach(async () => {

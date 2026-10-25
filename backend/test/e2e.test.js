@@ -1,23 +1,14 @@
+import { uriDePruebas, hayMongo } from './helpers/baseDeDatos.js';
 import { describe, it, expect, afterAll } from 'vitest';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import { crearApp } from '../src/app.js';
 
-const URI_PRUEBAS =
-  process.env.MONGODB_URI_TEST ?? 'mongodb://127.0.0.1:27017/linear-studio-pruebas';
+const URI_PRUEBAS = uriDePruebas('e2e');
 
 const app = crearApp();
 
-async function hayMongo() {
-  try {
-    await mongoose.connect(URI_PRUEBAS, { serverSelectionTimeoutMS: 3000 });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-const disponible = await hayMongo();
+const disponible = await hayMongo(URI_PRUEBAS);
 
 afterAll(async () => {
   if (disponible) {

@@ -5,6 +5,8 @@ export default defineConfig({
     environment: 'node',
     include: ['test/**/*.test.js'],
     globals: false,
+    // Cada archivo de pruebas usa su propia base de datos (test/helpers),
+    // así pueden correr en paralelo sin pisarse.
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
