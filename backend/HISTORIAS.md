@@ -124,3 +124,8 @@ Convención: `BE-<épica>.<n>`.
 - [x] **SE-1** Cálculo del precio sombra de cada restricción (signo correcto en `≤`, `≥` y con `MIN`).
 - [x] **SE-2** Bloque `resultado.sensibilidad` con los precios y su interpretación en español.
 - [x] **SE-3** Pruebas contra el caso de referencia y un caso calculado a mano.
+
+## Épica 13 — Cierre documental
+
+- [x] **DO-1** README del backend con los endpoints de autenticación, las variables extendidas y los precios sombra.
+- [x] **DO-2** `contexto_actualizado_del_proyecto.md` reconciliado con el estado real del código.
