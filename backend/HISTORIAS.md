@@ -75,12 +75,12 @@ Convención: `BE-<épica>.<n>`.
 
 ## Épica 7 — API HTTP
 
-- [ ] **BE-7.1** `src/app.js` + `src/server.js` con middlewares (cors, json, manejador de errores).
-- [ ] **BE-7.2** `POST /api/resolver` → 200 con la respuesta completa.
-- [ ] **BE-7.3** `POST /api/resolver` con modelo inválido → 400 con `errores[]`.
-- [ ] **BE-7.4** `GET /api/health` → 200.
-- [ ] **BE-7.5** 404 para rutas desconocidas y 500 con mensaje genérico en español.
-- [ ] **BE-7.6** `.env.example` y `src/config/db.js`.
+- [x] **BE-7.1** `src/app.js` + `src/server.js` con middlewares (cors, json, manejador de errores).
+- [x] **BE-7.2** `POST /api/resolver` → 200 con la respuesta completa.
+- [x] **BE-7.3** `POST /api/resolver` con modelo inválido → 400 con `errores[]`.
+- [x] **BE-7.4** `GET /api/health` → 200.
+- [x] **BE-7.5** 404 para rutas desconocidas y 500 con mensaje genérico en español.
+- [x] **BE-7.6** `.env.example` y `src/config/db.js`.
 
 ## Épica 8 — Persistencia (MongoDB) — *bloqueada hasta tener MongoDB*
 
