@@ -1,0 +1,120 @@
+# Linear Studio — Frontend
+
+Interfaz de **Linear Studio**, el sistema web del método simplex. React 19 + Vite 8 + Tailwind CSS 4,
+con el lenguaje visual de `DESIGN_SYSTEM_LINEAR_STUDIO.md` (fuente de verdad del diseño).
+
+La interfaz está **en español** y recorre las cuatro pantallas del método: ingreso de datos →
+modelo y tabla inicial → pivoteo → resultado final.
+
+---
+
+## 1. Requisitos
+
+| Herramienta | Versión |
+|---|---|
+| Node.js | 20 o superior (probado con 24.22.1 LTS) |
+| npm | 10 o superior |
+| Backend | Levanta el backend en `http://localhost:3000` (ver `backend/README.md`) |
+
+## 2. Instalación
+
+```bash
+cd frontend
+npm install
+cp .env.example .env      # y ajusta VITE_API_URL si el backend está en otro lado
+```
+
+## 3. Configuración (`.env`)
+
+| Variable | Por defecto | Descripción |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:3000` | Dirección del backend. |
+
+## 4. Scripts
+
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo en `http://localhost:5173`. |
+| `npm run build` | Compila el bundle de producción en `dist/`. |
+| `npm run preview` | Sirve el bundle ya compilado. |
+| `npm test` | Pruebas (Vitest + Testing Library). |
+| `npm run test:watch` | Pruebas en modo interactivo. |
+| `npm run coverage` | Pruebas + informe de cobertura. |
+
+## 5. Las cuatro pantallas
+
+1. **Ingreso de datos** — Se elige el número de variables (2 a 6), el tipo de optimización, los
+   coeficientes de `Z` y las restricciones. La vista previa se actualiza mientras se escribe y los
+   errores se muestran junto al formulario. El botón **Preparar modelo** llama a `POST /api/resolver`.
+2. **Modelo y tabla inicial** — La forma estándar con sus holguras, excedos y artificiales, el
+   sistema de ecuaciones y la tabla con la que arranca el método (rotulada `Z`, `Z′` o `W`).
+3. **Pivoteo** — Una tarjeta por iteración con la variable entrante, la saliente y el elemento
+   pivote; la prueba de razones; las operaciones de fila; y las tablas antes y después con el
+   pivote resaltado. Se navega entre iteraciones.
+4. **Resultado final** — El estado de la solución, las métricas (`Z`, variables, holguras), la
+   verificación de cada restricción, la interpretación, los precios sombra y el selector de
+   precisión decimal.
+
+## 6. Sesión y persistencia
+
+- **Modelos guardados** (barra superior): lista los modelos del usuario y permite abrirlos sin
+  recalcular, porque el backend guarda la resolución completa.
+- **Guardar**: persiste el modelo con su resolución. Requiere iniciar sesión.
+- **Sesión**: iniciar sesión, crear cuenta o restablecer la contraseña. El token se guarda en
+  `localStorage`.
+
+> El proyecto no incluye servidor de correo: la recuperación muestra el token en pantalla
+> (modo demostración), igual que en el backend.
+
+## 7. Sistema de diseño
+
+Los tokens viven una sola vez en `src/styles/tokens.css` y Tailwind los expone como utilidades:
+
+| Token | Uso |
+|---|---|
+| `bg-background` / `text-foreground` | Fondo de la aplicación y texto principal. |
+| `bg-card` / `border-border` | Superficies blancas y bordes finos. |
+| `bg-primary` / `text-primary-foreground` | Acción principal (azul `#2563EB`). |
+| `bg-primary-soft` | Selección activa y resaltado del pivote. |
+| `bg-success-soft` / `bg-warning-soft` / `bg-destructive-soft` | Estados semánticos. |
+
+Las fórmulas, las tablas y los coeficientes usan la clase `mono` (SFMono/Consolas); el resto usa
+Inter. Los iconos son de **Lucide**, nunca emojis.
+
+## 8. Estructura
+
+```
+frontend/
+  src/
+    App.jsx                     # montaje de las cuatro pantallas
+    main.jsx
+    index.css                   # Tailwind + tokens
+    styles/tokens.css           # tokens del sistema de diseño
+    layout/
+      Sidebar.jsx               # marca, pasos, ejercicio y referencia
+      Topbar.jsx                # breadcrumb, guardado y acciones
+    steps/
+      PasoIngreso.jsx           # paso 1
+      PasoModelo.jsx            # paso 2
+      PasoPivoteo.jsx           # paso 3
+      PasoResultado.jsx         # paso 4
+    components/
+      ui/                       # Button, Input, Card, Badge, Alert, SelectorObjetivo
+      TablaSimplex.jsx          # tabla con resaltado del pivote
+      ModelosGuardados.jsx      # panel de persistencia
+      PanelSesion.jsx           # login, registro y recuperación
+    estado/SimplexContexto.jsx  # estado global con reducer
+    services/api.js             # llamadas al backend
+    utils/                      # fracción, modelo, textos y clases
+  test/                         # pruebas (Vitest + Testing Library)
+  HISTORIAS.md                  # control de avance por historia
+```
+
+## 9. Pruebas
+
+```bash
+npm test
+```
+
+Cubren las utilidades (fracción y modelo), el paso 1 (renderizado, validación en vivo y envío al
+backend) y un **recorrido completo** por los cuatro pasos con la respuesta real del solver.

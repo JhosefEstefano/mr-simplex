@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 14px;
+  }
+
+  /* Fórmulas, tablas y coeficientes en monoespaciada */
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Foco visible para navegación por teclado */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary/40;
+  }
+}
+
+@layer components {
+  /* Encabezado de tabla matemática: fondo suave y mayúsculas pequeñas */
+  .tabla-cabecera {
+    @apply bg-background text-[11px] font-semibold uppercase tracking-wide text-muted-foreground;
+  }
+}

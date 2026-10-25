@@ -143,10 +143,9 @@ export function construirFormaEstandar(modelo) {
 export function textosModelo(modelo) {
   const variables = nombresVariables(modelo.numVariables, modelo.nombresVariables);
 
-  const terminosObjetivo = variables.map((nombre, indice) => ({
-    coeficiente: fraccion(modelo.coeficientesZ[indice]),
-    nombre
-  }));
+  const terminosObjetivo = variables
+    .map((nombre, indice) => ({ coeficiente: fraccion(modelo.coeficientesZ[indice]), nombre }))
+    .filter((termino) => !termino.coeficiente.equals(0));
 
   const restricciones = modelo.restricciones.map((restriccion) => {
     const terminos = variables
