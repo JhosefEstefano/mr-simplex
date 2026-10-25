@@ -97,3 +97,30 @@ Convención: `BE-<épica>.<n>`.
 - [x] **BE-9.1** Coverage ≥ 85 % en `src/services` y `src/controllers`.
 - [x] **BE-9.2** README del backend (instalación, scripts, endpoints, ejemplo).
 - [x] **BE-9.3** Suite de extremo a extremo: resolver → guardar → listar → recargar → eliminar.
+
+## Épica 10 — Autenticación (JWT)
+
+- [x] **AU-1** Esquema `models/Usuario.js` (nombre, correo único, contraseña cifrada, token de recuperación).
+- [x] **AU-2** Cifrado y verificación de contraseñas con bcrypt.
+- [x] **AU-3** Firma y verificación de tokens JWT + tokens aleatorios de un solo uso.
+- [x] **AU-4** `POST /api/auth/register` (201 con token; 400 si el correo ya existe o los datos son inválidos).
+- [x] **AU-5** `POST /api/auth/login` (200 con token; 401 si las credenciales no coinciden).
+- [x] **AU-6** `POST /api/auth/forgot-password` (genera el token; responde igual si el correo no existe).
+- [x] **AU-7** `POST /api/auth/reset-password` (cambia la contraseña e invalida el token).
+- [x] **AU-8** `GET /api/auth/yo` (perfil de la sesión).
+- [x] **AU-9** Middleware `requiereAuth` (401 sin token o con token inválido).
+- [x] **AU-10** `usuarioId` en el esquema `Modelo` y filtrado de `/api/modelos` por usuario.
+- [x] **AU-11** Pruebas de los endpoints de auth, del middleware y del aislamiento entre usuarios.
+
+## Épica 11 — Variables extendidas (módulo de transporte)
+
+- [ ] **VE-1** El modelo acepta `nombresVariables` propios (por ejemplo `x_11`, `x_12`).
+- [ ] **VE-2** El validador admite el modo extendido (hasta 60 variables) y mantiene 2–6 con `a`–`f` en el modo normal.
+- [ ] **VE-3** Los textos (objetivo, restricciones, no negatividad) usan los nombres propios.
+- [ ] **VE-4** Pruebas del modo extendido y del modo normal.
+
+## Épica 12 — Sensibilidad (precios sombra)
+
+- [ ] **SE-1** Cálculo del precio sombra de cada restricción (signo correcto en `≤`, `≥` y con `MIN`).
+- [ ] **SE-2** Bloque `resultado.sensibilidad` con los precios y su interpretación en español.
+- [ ] **SE-3** Pruebas contra el caso de referencia y un caso calculado a mano.

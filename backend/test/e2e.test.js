@@ -1,14 +1,22 @@
-import { uriDePruebas, hayMongo } from './helpers/baseDeDatos.js';
-import { describe, it, expect, afterAll } from 'vitest';
+import { describe, it, expect, afterAll, beforeAll } from 'vitest';
 import request from 'supertest';
 import mongoose from 'mongoose';
+import { uriDePruebas, hayMongo } from './helpers/baseDeDatos.js';
 import { crearApp } from '../src/app.js';
 
-const URI_PRUEBAS = uriDePruebas('e2e');
+process.env.JWT_SECRET = 'secreto-de-pruebas';
 
+const URI_PRUEBAS = uriDePruebas('e2e');
 const app = crearApp();
 
 const disponible = await hayMongo(URI_PRUEBAS);
+
+beforeAll(async () => {
+  if (!disponible) return;
+
+  await mongoose.connection.collection('usuarios').deleteMany({});
+  await mongoose.connection.collection('modelos').deleteMany({});
+});
 
 afterAll(async () => {
   if (disponible) {
@@ -17,8 +25,30 @@ afterAll(async () => {
   }
 });
 
+/** Crea la cuenta del usuario del recorrido (o inicia sesión si ya existe). */
+async function iniciarSesion() {
+  const datosCuenta = {
+    nombre: 'Usuario del recorrido',
+    email: 'recorrido@umg.edu.gt',
+    password: 'secreto123'
+  };
+
+  const registro = await request(app).post('/api/auth/register').send(datosCuenta);
+
+  if (registro.status === 201) return registro.body.token;
+
+  const ingreso = await request(app).post('/api/auth/login').send({
+    email: datosCuenta.email,
+    password: datosCuenta.password
+  });
+
+  return ingreso.body.token;
+}
+
 describe.skipIf(!disponible)('extremo a extremo — flujo completo del usuario', () => {
   it('resuelve, guarda, lista, recarga y elimina un modelo', async () => {
+    const token = await iniciarSesion();
+
     // 1. El usuario prepara el modelo.
     const modelo = {
       nombre: 'Flujo completo',
@@ -39,18 +69,25 @@ describe.skipIf(!disponible)('extremo a extremo — flujo completo del usuario',
     expect(resuelto.body.resultado.z.decimal).toBe(36);
 
     // 3. Lo guarda con su resolución.
-    const guardado = await request(app).post('/api/modelos').send(modelo);
+    const guardado = await request(app)
+      .post('/api/modelos')
+      .set('Authorization', `Bearer ${token}`)
+      .send(modelo);
     expect(guardado.status).toBe(201);
     const id = guardado.body._id;
 
     // 4. Aparece en la lista.
-    const lista = await request(app).get('/api/modelos');
+    const lista = await request(app)
+      .get('/api/modelos')
+      .set('Authorization', `Bearer ${token}`);
     expect(lista.body.total).toBe(1);
     expect(lista.body.modelos[0].nombre).toBe('Flujo completo');
     expect(lista.body.modelos[0].resolucion.estado).toBe('OPTIMO');
 
     // 5. Al recargarlo se puede volver a mostrar el procedimiento completo.
-    const detalle = await request(app).get(`/api/modelos/${id}`);
+    const detalle = await request(app)
+      .get(`/api/modelos/${id}`)
+      .set('Authorization', `Bearer ${token}`);
     expect(detalle.status).toBe(200);
     expect(detalle.body.resolucion.iteraciones).toHaveLength(3);
     expect(detalle.body.resolucion.tablaInicial.encabezados).toEqual([
@@ -66,14 +103,20 @@ describe.skipIf(!disponible)('extremo a extremo — flujo completo del usuario',
     expect(detalle.body.resolucion.resultado.interpretacion).toContain('Z = 36');
 
     // 6. Lo elimina.
-    const eliminado = await request(app).delete(`/api/modelos/${id}`);
+    const eliminado = await request(app)
+      .delete(`/api/modelos/${id}`)
+      .set('Authorization', `Bearer ${token}`);
     expect(eliminado.status).toBe(200);
 
-    const listaFinal = await request(app).get('/api/modelos');
+    const listaFinal = await request(app)
+      .get('/api/modelos')
+      .set('Authorization', `Bearer ${token}`);
     expect(listaFinal.body.total).toBe(0);
   });
 
   it('rechaza un modelo con errores antes de llegar al solver', async () => {
+    const token = await iniciarSesion();
+
     const invalido = {
       nombre: 'Con errores',
       numVariables: 2,
@@ -82,10 +125,23 @@ describe.skipIf(!disponible)('extremo a extremo — flujo completo del usuario',
       restricciones: [{ coeficientes: [1, 0], signo: '<=' }]
     };
 
-    const { status, body } = await request(app).post('/api/modelos').send(invalido);
+    const { status, body } = await request(app)
+      .post('/api/modelos')
+      .set('Authorization', `Bearer ${token}`)
+      .send(invalido);
 
     expect(status).toBe(400);
     expect(body.estado).toBe('ERROR_VALIDACION');
     expect(body.errores[0].campo).toBe('restricciones[0].rhs');
+  });
+
+  it('no deja guardar un modelo sin iniciar sesión', async () => {
+    const { status, body } = await request(app)
+      .post('/api/modelos')
+      .send({ nombre: 'Sin sesión', numVariables: 2, objetivo: 'MAX', coeficientesZ: [1, 1],
+        restricciones: [{ coeficientes: [1, 0], signo: '<=', rhs: 1 }] });
+
+    expect(status).toBe(401);
+    expect(body.estado).toBe('NO_AUTENTICADO');
   });
 });

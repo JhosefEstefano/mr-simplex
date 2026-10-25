@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import resolverRoutes from './routes/resolver.routes.js';
 import modelosRoutes from './routes/modelos.routes.js';
+import authRoutes from './routes/auth.routes.js';
 import { manejadorDeErrores, rutaNoEncontrada } from './middlewares/errores.js';
 
 /**
@@ -31,6 +32,7 @@ export function crearApp() {
     });
   });
 
+  app.use('/api/auth', authRoutes);
   app.use('/api/resolver', resolverRoutes);
   app.use('/api/modelos', modelosRoutes);
 

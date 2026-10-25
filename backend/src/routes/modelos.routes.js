@@ -6,9 +6,13 @@ import {
   actualizarModeloController,
   eliminarModeloController
 } from '../controllers/modelos.controller.js';
+import { requiereAuth } from '../middlewares/auth.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 
 const router = Router();
+
+// Toda la persistencia exige una sesión iniciada.
+router.use(requiereAuth);
 
 router.get('/', asyncHandler(listarModelosController));
 router.post('/', asyncHandler(crearModeloController));

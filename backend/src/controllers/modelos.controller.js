@@ -36,6 +36,11 @@ function prepararResolucion(modelo) {
   };
 }
 
+/** Un modelo pertenece al usuario si su usuarioId coincide con el de la sesión. */
+function esDelUsuario(modelo, usuarioId) {
+  return modelo.usuarioId !== null && modelo.usuarioId.toString() === usuarioId.toString();
+}
+
 /**
  * POST /api/modelos
  * Guarda un modelo con su resolución embebida.
@@ -52,7 +57,11 @@ export async function crearModeloController(req, res) {
   const resolucion = prepararResolucion(datos);
 
   try {
-    const guardado = await Modelo.create({ ...datos, resolucion });
+    const guardado = await Modelo.create({
+      ...datos,
+      usuarioId: req.usuario.id,
+      resolucion
+    });
     res.status(201).json(guardado.toObject());
   } catch (error) {
     res.status(400).json({
@@ -65,10 +74,15 @@ export async function crearModeloController(req, res) {
 
 /**
  * GET /api/modelos
- * Lista los modelos guardados sin las iteraciones, para que la lista sea ligera.
+ * Lista los modelos del usuario y los ejemplos públicos, sin las iteraciones
+ * para que la lista no pese.
  */
 export async function listarModelosController(req, res) {
-  const modelos = await Modelo.find().select('-resolucion.iteraciones').sort({ creadoEn: -1 });
+  const modelos = await Modelo.find({
+    $or: [{ usuarioId: req.usuario.id }, { usuarioId: null }]
+  })
+    .select('-resolucion.iteraciones')
+    .sort({ creadoEn: -1 });
 
   res.status(200).json({ modelos, total: modelos.length });
 }
@@ -92,6 +106,14 @@ export async function obtenerModeloController(req, res) {
     res.status(404).json({
       estado: 'NO_ENCONTRADO',
       mensaje: `El modelo ${req.params.id} no existe.`
+    });
+    return;
+  }
+
+  if (!esDelUsuario(modelo, req.usuario.id) && modelo.usuarioId !== null) {
+    res.status(403).json({
+      estado: 'SIN_PERMISO',
+      mensaje: 'Este modelo pertenece a otra cuenta.'
     });
     return;
   }
@@ -129,6 +151,14 @@ export async function actualizarModeloController(req, res) {
     return;
   }
 
+  if (!esDelUsuario(modelo, req.usuario.id)) {
+    res.status(403).json({
+      estado: 'SIN_PERMISO',
+      mensaje: 'Este modelo pertenece a otra cuenta.'
+    });
+    return;
+  }
+
   const datos = datosDelModelo(req.body);
 
   modelo.set(datos);
@@ -151,7 +181,7 @@ export async function eliminarModeloController(req, res) {
     return;
   }
 
-  const modelo = await Modelo.findByIdAndDelete(req.params.id);
+  const modelo = await Modelo.findById(req.params.id);
 
   if (!modelo) {
     res.status(404).json({
@@ -160,6 +190,16 @@ export async function eliminarModeloController(req, res) {
     });
     return;
   }
+
+  if (!esDelUsuario(modelo, req.usuario.id)) {
+    res.status(403).json({
+      estado: 'SIN_PERMISO',
+      mensaje: 'Este modelo pertenece a otra cuenta.'
+    });
+    return;
+  }
+
+  await modelo.deleteOne();
 
   res.status(200).json({
     estado: 'ELIMINADO',

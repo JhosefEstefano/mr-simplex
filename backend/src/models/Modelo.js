@@ -28,6 +28,8 @@ const ModeloSchema = new Schema(
         message: 'El modelo debe tener al menos una restricción.'
       }
     },
+    /** Dueño del modelo. Si es null, el modelo es un ejemplo público. */
+    usuarioId: { type: Schema.Types.ObjectId, ref: 'Usuario', default: null, index: true },
     resolucion: {
       estado: { type: String, enum: [ESTADOS.OPTIMO, ESTADOS.INFACTIBLE, ESTADOS.NO_ACOTADO] },
       mensaje: String,
